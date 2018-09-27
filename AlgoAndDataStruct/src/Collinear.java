@@ -3,7 +3,7 @@
  * This class contains only two static methods that search for points on the
  * same line in three arrays of integers.
  *
- * @author
+ * @author Senán d'Art
  * @version 18/09/18 12:21:09
  */
 class Collinear {

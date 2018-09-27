@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * Test class for Collinear.java
  *
- * @author
+ * @author Senán d'Art
  * @version 18/09/18 12:21:26
  */
 @RunWith(JUnit4.class)
