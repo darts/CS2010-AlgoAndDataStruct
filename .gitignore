@@ -32,3 +32,13 @@ AlgoAndDataStruct/.project
 .recommenders/index/http___download_eclipse_org_recommenders_models_photon_/segments.gen
 .recommenders/index/http___download_eclipse_org_recommenders_models_photon_/segments_1
 .recommenders/index/http___download_eclipse_org_recommenders_models_photon_/write.lock
+All-Work/
+/.recommenders/
+AlgoAndDataStruct/src/BonusAssign/package-info.java
+AlgoAndDataStructBonus/.classpath
+AlgoAndDataStruct/src/BonusAssign/package-info.java
+AlgoAndDataStructBonus/.settings/org.eclipse.jdt.core.prefs
+AlgoAndDataStructBonus/.project
+AlgoAndDataStructBonusAssignment/.classpath
+AlgoAndDataStructBonusAssignment/.project
+AlgoAndDataStructBonusAssignment/.settings/org.eclipse.jdt.core.prefs
