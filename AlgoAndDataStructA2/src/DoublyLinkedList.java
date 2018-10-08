@@ -1,7 +1,3 @@
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-
 // -------------------------------------------------------------------------
 /**
  *  This class contains the methods of Doubly Linked List.
@@ -214,10 +210,14 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 */
 	public boolean deleteAt(int pos) {
 		DLLNode tmpNode = getObjAt(pos);
-		if (tmpNode != null) {
-			tmpNode.prev.next = tmpNode.next;
-			tmpNode.next.prev = tmpNode.prev;
-			tmpNode = null;
+		return delNode(tmpNode);
+	}
+	
+	private boolean delNode(DLLNode node) {
+		if (node != null) {
+			node.prev.next = node.next;
+			node.next.prev = node.prev;
+			node = null;
 			listSize--;
 			return true;
 		}
@@ -233,9 +233,19 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * Justification: TODO
 	 */
 	public void reverse() {
-		if (head != null) {
-
+		if (!isEmpty()) {
+			for(int i = 0; i <= listSize/2; i++) {
+				swapElems(getObjAt(i), getObjAt((listSize-1) - i));
+			}
 		}
+	}
+	
+	private void swapElems(DLLNode first, DLLNode second) {
+		DLLNode tmp = first;
+		first.next = second.next;
+		first.prev = second.prev;
+		second.next = tmp.next;
+		second.prev = tmp.prev;
 	}
 
 	/**
@@ -250,6 +260,14 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * Justification: TODO
 	 */
 	public void makeUniqueue() {
+		for(int i = 0; i < listSize - 2; i++) {
+			DLLNode primNode = getObjAt(i);
+			for(int j = i + 1; j < listSize - 1; j++) {
+				DLLNode tmp =  getObjAt(j);
+				if(primNode.equals(tmp))
+					delNode(tmp);
+			}
+		}
 	}
 
 	/*----------------------- STACK API 
