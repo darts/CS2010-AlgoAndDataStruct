@@ -42,3 +42,6 @@ AlgoAndDataStructBonus/.project
 AlgoAndDataStructBonusAssignment/.classpath
 AlgoAndDataStructBonusAssignment/.project
 AlgoAndDataStructBonusAssignment/.settings/org.eclipse.jdt.core.prefs
+*.prefs
+AlgoAndDataStructA2/.project
+AlgoAndDataStructA2/.classpath

@@ -24,20 +24,6 @@ public class ArithTest {
 
 		assertEquals("validatePostfixOrder failed with a null array", expectedResult,
 				Arith.validatePostfixOrder(theInput));
-		
-		int expResult = -1;
-		assertEquals("findRightMostOperand failed with a null array", expResult,
-				Arith.findRightMostOperand(theInput));
-		
-		assertEquals("findLeftMostInt failed with a null array", expResult,
-				Arith.findLeftMostInts(theInput, 0));
-		
-		assertEquals("findLeftMostOperand failed with a null array", expResult,
-				Arith.findLeftMostOperand(theInput));
-		
-		assertEquals("findRightMostInt failed with a null array", expResult,
-				Arith.findRightMostInts(theInput, -1));
-		
 	}
 	
 	//Test for an empty array

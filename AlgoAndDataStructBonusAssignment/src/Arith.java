@@ -43,46 +43,44 @@ public class Arith {
 			return false;
 		while (moreThanOnePopulated(prefixLiterals)) {
 			int op = findRightMostOperand(prefixLiterals);
-			int lNum = findLeftMostInts(prefixLiterals, 0);
-			if (op == -1 || op > lNum || lNum == -1) {// more than 1 item left in the array and no operands, operand is
-														// ahead of numbers, no numbers left
+			int[] lNum = findLeftMostInts(prefixLiterals);
+			if (op == -1 || op > lNum[0] || lNum[1] == -1) {// more than 1 item left in the array and no operands,
+															// operand is
+				// ahead of numbers, no numbers left
 				return false;
 			} else {
 				prefixLiterals[op] = EMPTY;
-				prefixLiterals[lNum] = EMPTY;
+				prefixLiterals[lNum[0]] = EMPTY;
 
 			}
 		}
 		return true;
 	}
 
-	static int findLeftMostInts(String[] theArray, int startPoint) {
-		int mostLeft = -1;
-		if (theArray != null) {
-			for (int i = startPoint; i < theArray.length; i++) {
-				String theChar = theArray[i];
-				if (!isOperator(theChar) && !theChar.equals(EMPTY)) {
-					if (startPoint != 0 && i + 1 < theArray.length && findLeftMostInts(theArray, i + 1) != -1) {
-						return i;
-					}
-				}
+	static int[] findLeftMostInts(String[] theArray) {
+		int[] mostLeft = { -1, -1 };
+		for (int i = 0; i < theArray.length; i++) {
+			String theChar = theArray[i];
+			if (!isOperator(theChar) && !theChar.equals(EMPTY)) {
+				mostLeft[1] = mostLeft[0];
+				mostLeft[0] = i;
 			}
+
 		}
 		return mostLeft;
 	}
 
 	static int findRightMostOperand(String[] theArray) {
 		int mostRight = -1;
-		if (theArray != null) {
-			for (int i = 0; i < theArray.length; i++) {
-				String theChar = theArray[i];
-				if (isOperator(theChar)) {
-					mostRight = i;
-				} else if (theChar.equals(EMPTY)) {
-				} else {
-					return mostRight;
-				}
+		for (int i = 0; i < theArray.length; i++) {
+			String theChar = theArray[i];
+			if (isOperator(theChar)) {
+				mostRight = i;
+			} else if (theChar.equals(EMPTY)) {
+			} else {
+				return mostRight;
 			}
+
 		}
 		return mostRight;
 	}
@@ -128,13 +126,14 @@ public class Arith {
 			return false;
 		while (moreThanOnePopulated(postfixLiterals)) {
 			int op = findLeftMostOperand(postfixLiterals);
-			int lNum = findRightMostInts(postfixLiterals, postfixLiterals.length);
-			if (op == -1 || op < lNum || lNum == -1) {// more than 1 item left in the array and no operands, operand is
-														// ahead of numbers, no numbers left
+			int[] lNum = findRightMostInts(postfixLiterals);
+			if (op == -1 || op < lNum[0] || lNum[1] == -1) {// more than 1 item left in the array and no operands,
+															// operand is
+				// ahead of numbers, no numbers left
 				return false;
 			} else {
 				postfixLiterals[op] = EMPTY;
-				postfixLiterals[lNum] = EMPTY;
+				postfixLiterals[lNum[0]] = EMPTY;
 			}
 		}
 		return true;
@@ -142,52 +141,26 @@ public class Arith {
 
 	static int findLeftMostOperand(String[] theArray) {
 		int mostLeft = -1;
-		if (theArray != null) {
-			for (int i = 0; i < theArray.length; i++) {
-				String theChar = theArray[i];
-				if (isOperator(theChar)) {
-					return i;
-				}
+		for (int i = 0; i < theArray.length; i++) {
+			String theChar = theArray[i];
+			if (isOperator(theChar)) {
+				return i;
 			}
+
 		}
 		return mostLeft;
 	}
 
-	static int findRightMostInts(String[] theArray, int limit) {
-		int mostRight = -1;
-		if (theArray != null) {
-			for (int i = 0; i < limit; i++) {
-				String theChar = theArray[i];
-				if (theChar.equals(EMPTY)) {
-				} else if (!isOperator(theChar)) {
-					mostRight = i;
-				} else {
-					if (findRightMostInts(theArray, i - 1) != -1)
-						return mostRight;
-					return -1;
-				}
-			}
-			if (mostRight == -1)
-				return -1;
-			if (limit != theArray.length && findRightMostInts(theArray, mostRight - 1) == -1)
-				return -1;
-		}
-		return mostRight;
-	}
-
-	static int[] findRightMostInt(String[] theArray) {
+	static int[] findRightMostInts(String[] theArray) {
 		int[] mostRight = { -1, -1 };
-		if (theArray != null) {
-			for (int i = 0; i < theArray.length; i++) {
-				String theChar = theArray[i];
-				if (theChar.equals(EMPTY)) {
-				} else if (!isOperator(theChar)) {
-					mostRight[1] = mostRight[0];
-					mostRight[0] = i;
-				} else {
-					return mostRight;
-
-				}
+		for (int i = 0; i < theArray.length; i++) {
+			String theChar = theArray[i];
+			if (theChar.equals(EMPTY)) {
+			} else if (!isOperator(theChar)) {
+				mostRight[1] = mostRight[0];
+				mostRight[0] = i;
+			} else {
+				return mostRight;
 			}
 		}
 		return mostRight;
