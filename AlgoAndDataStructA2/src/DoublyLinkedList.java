@@ -30,8 +30,7 @@
  */
 class DoublyLinkedList<T extends Comparable<T>> {
 
-	int listSize = 0;
-
+	private int listSize = 0; 
 	/**
 	 * private class DLLNode: implements a *generic* Doubly Linked List node.
 	 */
@@ -65,8 +64,9 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * @return DoublyLinkedList
 	 */
 	public DoublyLinkedList() {
-		head = null;
-		tail = null;
+		head = new DLLNode(null, null, tail);
+		tail = new DLLNode(null, head, null);
+		head.next = tail;
 	}
 
 	/**
@@ -109,7 +109,7 @@ class DoublyLinkedList<T extends Comparable<T>> {
 		if (isEmpty() || pos < 0) {
 			insertElement(data, head, head.next);
 			return;
-		}else if(pos >= listSize) {
+		} else if (pos >= listSize) {
 			insertElement(data, tail.prev, tail);
 			return;
 		}
@@ -135,18 +135,9 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	// function does no calculation, just assignment. Therefore it is constant.
 	private void insertElement(T data, DLLNode prev, DLLNode next) {
 		DLLNode tmpNode = new DLLNode(data, prev, next);
-		if (prev == null) {// No elements in list
-			prev = new DLLNode(null, null, tmpNode);// create head
-			next = new DLLNode(null, tmpNode, null);// create tail
-			tmpNode.next = next;
-			tmpNode.prev = prev;
-			listSize++;
-		} else {
-			prev.next = tmpNode;
-			next.prev = tmpNode;
-			listSize++;
-		}
-
+		prev.next = tmpNode;
+		next.prev = tmpNode;
+		listSize++;
 	}
 
 	/**
@@ -212,7 +203,7 @@ class DoublyLinkedList<T extends Comparable<T>> {
 		DLLNode tmpNode = getObjAt(pos);
 		return delNode(tmpNode);
 	}
-	
+
 	private boolean delNode(DLLNode node) {
 		if (node != null) {
 			node.prev.next = node.next;
@@ -234,18 +225,28 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 */
 	public void reverse() {
 		if (!isEmpty()) {
-			for(int i = 0; i <= listSize/2; i++) {
-				swapElems(getObjAt(i), getObjAt((listSize-1) - i));
+			for (int i = 0; i <= listSize / 2; i++) {
+				if (i == 0) {
+					swapElems(getObjAt(i), getObjAt((listSize - 1) - i));
+				} else {
+					swapElems(getObjAt(i), getObjAt((listSize - 1) - i));
+				}
 			}
 		}
 	}
-	
+
 	private void swapElems(DLLNode first, DLLNode second) {
-		DLLNode tmp = first;
-		first.next = second.next;
-		first.prev = second.prev;
-		second.next = tmp.next;
-		second.prev = tmp.prev;
+		DLLNode tmpFirst = new DLLNode(first.data, first.prev, first.next);
+		DLLNode tmpSecond = new DLLNode(second.data, second.prev, second.next);
+
+		second.prev = tmpFirst.prev;
+		second.next = tmpFirst.next;
+		first.prev = tmpSecond.prev;
+		first.next = tmpSecond.next;
+		second.prev.next = second;
+		second.next.prev = second;
+		first.prev.next = first;
+		first.next.prev = first;
 	}
 
 	/**
@@ -260,11 +261,11 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * Justification: TODO
 	 */
 	public void makeUniqueue() {
-		for(int i = 0; i < listSize - 2; i++) {
+		for (int i = 0; i < listSize - 2; i++) {
 			DLLNode primNode = getObjAt(i);
-			for(int j = i + 1; j < listSize - 1; j++) {
-				DLLNode tmp =  getObjAt(j);
-				if(primNode.equals(tmp))
+			for (int j = i + 1; j < listSize; j++) {
+				DLLNode tmp = getObjAt(j);
+				if (primNode.data.equals(tmp.data))
 					delNode(tmp);
 			}
 		}
@@ -299,9 +300,12 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 *         Justification: TODO
 	 */
 	public T pop() {
-		DLLNode node = getObjAt(0);
-		if(node != null)
-			return node.data;
+		if (!isEmpty()) {
+			DLLNode node = getObjAt(0);
+			T data = node.data;
+			delNode(node);
+			return data;
+		}
 		return null;
 	}
 
@@ -335,8 +339,11 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 *         Justification: TODO
 	 */
 	public T dequeue() {
-		if(!isEmpty()) {
-			return getObjAt(listSize - 1).data;
+		if (!isEmpty()) {
+			DLLNode node = getObjAt(listSize - 1);
+			T data = node.data;
+			delNode(node);
+			return data;
 		}
 		return null;
 	}
@@ -361,7 +368,7 @@ class DoublyLinkedList<T extends Comparable<T>> {
 		boolean isFirst = true;
 
 		// iterate over the list, starting from the head
-		for (DLLNode iter = head; iter != null; iter = iter.next) {
+		for (DLLNode iter = head.next; iter.next != null; iter = iter.next) {
 			if (!isFirst) {
 				s.append(",");
 			} else {
