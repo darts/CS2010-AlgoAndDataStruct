@@ -30,8 +30,7 @@
  */
 class DoublyLinkedList<T extends Comparable<T>> {
 
-	private int listSize = 0;
-
+	private int listSize = 0; 
 	/**
 	 * private class DLLNode: implements a *generic* Doubly Linked List node.
 	 */
@@ -65,8 +64,9 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * @return DoublyLinkedList
 	 */
 	public DoublyLinkedList() {
-		head = null;
-		tail = null;
+		head = new DLLNode(null, null, tail);
+		tail = new DLLNode(null, head, null);
+		head.next = tail;
 	}
 
 	/**
@@ -106,45 +106,24 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 *         running time is Theta(N/2), with N being the size of the list.
 	 */
 	public void insertBefore(int pos, T data) {
-		if (isEmpty()) {
-			head = new DLLNode(data, null, null);
-			tail = head;
-			listSize++;
-			return;
-		} else if (listSize == 1) {
-			if (pos <= 0) {
-				head = new DLLNode(data, null, tail);
-				tail.prev = head;
-			} else {
-				tail = new DLLNode(data, head, null);
-				head.next = tail;
-			}
-			listSize++;
-			return;
-		} else if (pos <= 0) {
-			DLLNode tmpNode = new DLLNode(data, null, head);
-			head.prev = tmpNode;
-			head = tmpNode;
-			listSize++;
+		if (isEmpty() || pos < 0) {
+			insertElement(data, head, head.next);
 			return;
 		} else if (pos >= listSize) {
-			DLLNode tmpNode = new DLLNode(data, tail, null);
-			tail.next = tmpNode;
-			tail = tmpNode;
-			listSize++;
+			insertElement(data, tail.prev, tail);
 			return;
 		}
 
 		if (pos < listSize / 2) {// item is in the first half of the list
 			DLLNode tmpObj = head;
-			for (int i = 0; i < pos; i++) {// loop through to find the item
+			for (int i = 0; i <= pos; i++) {// loop through to find the item
 				tmpObj = tmpObj.next;
 			}
 			insertElement(data, tmpObj.prev, tmpObj);
 		} else {// item is in the second half of the list
 			DLLNode tmpObj = tail;
 			int adPos = listSize - pos;// new position as we start from the other end of the list
-			for (int i = 0; i < adPos - 1; i++) {// loop through to find the item
+			for (int i = 0; i < adPos; i++) {// loop through to find the item
 				tmpObj = tmpObj.prev;
 			}
 			insertElement(data, tmpObj.prev, tmpObj);
@@ -193,14 +172,14 @@ class DoublyLinkedList<T extends Comparable<T>> {
 
 		if (pos < listSize / 2) {// item is in the first half of the list
 			DLLNode tmpObj = head;
-			for (int i = 0; i < pos; i++) {// loop through to find the item
+			for (int i = 0; i <= pos; i++) {// loop through to find the item
 				tmpObj = tmpObj.next;
 			}
 			return tmpObj;
 		} else {// item is in the second half of the list
 			DLLNode tmpObj = tail;
 			int adPos = listSize - pos;// new position as we start from the other end of the list
-			for (int i = 0; i < adPos - 1; i++) {// loop through to find the item
+			for (int i = 0; i < adPos; i++) {// loop through to find the item
 				tmpObj = tmpObj.prev;
 			}
 			return tmpObj;
@@ -225,14 +204,12 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	}
 
 	private boolean delNode(DLLNode node) {
-		if (node != null && listSize > 1) {
+		if (node != null) {
 			node.prev.next = node.next;
 			node.next.prev = node.prev;
 			node = null;
 			listSize--;
 			return true;
-		}else {
-			
 		}
 		return false;
 	}
@@ -265,14 +242,10 @@ class DoublyLinkedList<T extends Comparable<T>> {
 		second.next = tmpFirst.next;
 		first.prev = tmpSecond.prev;
 		first.next = tmpSecond.next;
-		if (second.prev != null)
-			second.prev.next = second;
-		if (second.next != null)
-			second.next.prev = second;
-		if (first.prev != null)
-			first.prev.next = first;
-		if (first.next != null)
-			first.next.prev = first;
+		second.prev.next = second;
+		second.next.prev = second;
+		first.prev.next = first;
+		first.next.prev = first;
 	}
 
 	/**
@@ -287,7 +260,7 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * Justification: TODO
 	 */
 	public void makeUniqueue() {
-		for (int i = 0; i < listSize - 2; i++) {
+		for (int i = 0; i < listSize - 1; i++) {
 			DLLNode primNode = getObjAt(i);
 			for (int j = i + 1; j < listSize; j++) {
 				DLLNode tmp = getObjAt(j);
@@ -350,7 +323,7 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 *             Justification: TODO
 	 */
 	public void enqueue(T item) {
-		insertBefore(0 , item);
+		insertBefore(-1, item);
 	}
 
 	/**
@@ -394,7 +367,7 @@ class DoublyLinkedList<T extends Comparable<T>> {
 		boolean isFirst = true;
 
 		// iterate over the list, starting from the head
-		for (DLLNode iter = head; iter != null; iter = iter.next) {
+		for (DLLNode iter = head.next; iter.next != null; iter = iter.next) {
 			if (!isFirst) {
 				s.append(",");
 			} else {
