@@ -28,75 +28,25 @@ public class Arith {
 	 * @return true if the parameter is indeed in prefix notation, and false
 	 *         otherwise.
 	 * 
-	 *         Method: 1)Take farthest right operand in a row (+ - / 2 4 5 -> /)
-	 * 
-	 *         2)Perform calculation on subsequent two numbers (+ - / 2 4 5 -> 2 /
-	 *         4). Store result in location of the second number. ( + - / 2 4 5 -> +
-	 *         - / 2 2 5).
-	 * 
-	 *         3) Replace the operand and first number with EMPTY, (+ - / 2 2 5 -> +
-	 *         - EMPTY EMPTY 2 5). 4) In this case we can ignore the calculation
-	 *         part.
 	 **/
 	public static boolean validatePrefixOrder(String prefixLiterals[]) {
 		if (prefixLiterals == null || prefixLiterals.length == 0)
 			return false;
-		while (moreThanOnePopulated(prefixLiterals)) {
-			int op = findRightMostOperand(prefixLiterals);
-			int[] lNum = findLeftMostInts(prefixLiterals);
-			if (op == -1 || op > lNum[0] || lNum[1] == -1) {// more than 1 item left in the array and no operands,
-															// operand is
-				// ahead of numbers, no numbers left
+		int counter = 1;
+		for (int i = 0; i < prefixLiterals.length; i++) {
+			if (counter <= 0)
 				return false;
-			} else {
-				prefixLiterals[op] = EMPTY;
-				prefixLiterals[lNum[0]] = EMPTY;
-
-			}
+			if (isOperator(prefixLiterals[i]))
+				counter++;
+			else
+				counter--;
 		}
-		return true;
-	}
-
-	static int[] findLeftMostInts(String[] theArray) {
-		int[] mostLeft = { -1, -1 };
-		for (int i = 0; i < theArray.length; i++) {
-			String theChar = theArray[i];
-			if (!isOperator(theChar) && !theChar.equals(EMPTY)) {
-				mostLeft[1] = mostLeft[0];
-				mostLeft[0] = i;
-			}
-
-		}
-		return mostLeft;
-	}
-
-	static int findRightMostOperand(String[] theArray) {
-		int mostRight = -1;
-		for (int i = 0; i < theArray.length; i++) {
-			String theChar = theArray[i];
-			if (isOperator(theChar)) {
-				mostRight = i;
-			} else if (theChar.equals(EMPTY)) {
-			} else {
-				return mostRight;
-			}
-
-		}
-		return mostRight;
-	}
-
-	static boolean moreThanOnePopulated(String[] theArray) {
-		int count = 0;
-		for (int i = 0; i < theArray.length; i++) {
-			if (!theArray[i].equals(EMPTY))
-				count++;
-			if (count > 1)
-				return true;
-		}
+		if (counter == 0)
+			return true;
 		return false;
-
 	}
 
+	// Is it an operand
 	static boolean isOperator(String theOp) {
 		if (theOp.equals(PLUS) || theOp.equals(MINUS) || theOp.equals(DIV) || theOp.equals(MULT))
 			return true;
@@ -139,6 +89,7 @@ public class Arith {
 		return true;
 	}
 
+	// find the left most operand starting from the left of the array (0)
 	static int findLeftMostOperand(String[] theArray) {
 		int mostLeft = -1;
 		for (int i = 0; i < theArray.length; i++) {
@@ -151,6 +102,7 @@ public class Arith {
 		return mostLeft;
 	}
 
+	// Find the right most ints starting from the left of the array (0)
 	static int[] findRightMostInts(String[] theArray) {
 		int[] mostRight = { -1, -1 };
 		for (int i = 0; i < theArray.length; i++) {
@@ -177,7 +129,7 @@ public class Arith {
 	 *                       can be one of: - "+", "-", "*", or "/" - or a valid
 	 *                       string representation of an integer.
 	 *
-	 * @return the integer result of evaluating the expression Method: 1)Take
+	 * @return the integer result of evaluating the expression Method: 1)Take the
 	 *         farthest right operand in a row (+ - / 2 4 5 -> /)
 	 * 
 	 *         2)Perform calculation on subsequent two numbers (+ - / 2 4 5 -> 2 /
@@ -185,11 +137,64 @@ public class Arith {
 	 *         - / 2 2 5).
 	 * 
 	 *         3) Replace the operand and first number with EMPTY, (+ - / 2 2 5 -> +
-	 *         - EMPTY EMPTY 2 5). 4) In this case we can ignore the calculation .
+	 *         - EMPTY EMPTY 2 5).
+	 * 
 	 **/
 	public static int evaluatePrefixOrder(String prefixLiterals[]) {
+		if (prefixLiterals == null || prefixLiterals.length == 0)
+			return -1;
+		while (moreThanOnePopulated(prefixLiterals)) {
+			int op = findRightMostOperand(prefixLiterals);
+			int[] lNum = findLeftMostInts(prefixLiterals);
+			if (op == -1 || op > lNum[0] || lNum[1] == -1) {// more than 1 item left in the array and no operands,
+															// operand is
+				// ahead of numbers, no numbers left
+				return -1;
+			} else {
+				prefixLiterals[op] = EMPTY;
+				prefixLiterals[lNum[0]] = EMPTY;
 
+			}
+		}
 		return -1;
+	}
+
+	// Find the two left most ints starting from the right side of the array
+	static int[] findLeftMostInts(String[] theArray) {
+		int[] mostLeft = { -1, -1 };
+		for (int i = theArray.length - 1; i >= 0; i--) {
+			String theChar = theArray[i];
+			if (isOperator(theChar)) {
+				return mostLeft;
+			} else if (!theChar.equals(EMPTY)) {
+				mostLeft[1] = mostLeft[0];
+				mostLeft[0] = i;
+			}
+		}
+		return mostLeft;
+	}
+
+	// Find the right most operand starting from the right side of the array
+	static int findRightMostOperand(String[] theArray) {
+		for (int i = theArray.length - 1; i >= 0; i--) {
+			String theChar = theArray[i];
+			if (isOperator(theChar))
+				return i;
+		}
+		return -1;
+	}
+
+	// More than 1 element remaining in the array
+	static boolean moreThanOnePopulated(String[] theArray) {
+		int count = 0;
+		for (int i = 0; i < theArray.length; i++) {
+			if (!theArray[i].equals(EMPTY))
+				count++;
+			if (count > 1)
+				return true;
+		}
+		return false;
+
 	}
 
 	/**

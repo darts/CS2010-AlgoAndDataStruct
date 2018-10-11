@@ -128,6 +128,8 @@ public class DoublyLinkedListTest {
 		testDLL.insertBefore(3, 0);
 		
 		assertEquals("Checking getting a number.", i , testDLL.get(0));
+		i = 6;
+		assertEquals("Checking getting a number.", i, testDLL.get(10));
 		i = 3;
 		assertEquals("Checking getting a number.", i , testDLL.get(2));
 		assertEquals("Checking getting a number outside the list.", null , testDLL.get(-1));
@@ -156,6 +158,22 @@ public class DoublyLinkedListTest {
 
 		testDLL.reverse();
 		assertEquals("Check reverse list", "2,4,3,2,1", testDLL.toString());
+
+		DoublyLinkedList<Integer> intDLL = new DoublyLinkedList<Integer>();
+		intDLL.enqueue(1);
+		intDLL.enqueue(3);
+		intDLL.reverse();
+		assertEquals("Check reverse list", "1,3", intDLL.toString());
+		
+		DoublyLinkedList<Integer> oneDLL = new DoublyLinkedList<Integer>();
+		oneDLL.enqueue(1);
+		oneDLL.reverse();
+		assertEquals("check reverse list of size 1", "1", oneDLL.toString());
+		oneDLL.enqueue(2);
+		oneDLL.enqueue(3);
+		oneDLL.enqueue(4);
+		oneDLL.reverse();
+		assertEquals("check reverse list of size 4", "1,2,3,4", oneDLL.toString());
 	}
 	
 	@Test
@@ -172,9 +190,30 @@ public class DoublyLinkedListTest {
 		testDLL.insertBefore(4, 3);
 		testDLL.insertBefore(4, 2);
 
-		testDLL.makeUniqueue();
+		testDLL.makeUnique();
 		
 		assertEquals("Check reverse list", "1,2,3,4", testDLL.toString());
+		
+		testDLL.makeUnique();
+		assertEquals("Check reverse list", "1,2,3,4", testDLL.toString());
+		
+		DoublyLinkedList<String> strDLL = new DoublyLinkedList<String>();
+		strDLL.enqueue("test");
+		strDLL.enqueue("test");
+		strDLL.makeUnique();
+		assertEquals("Check unique list", "test", strDLL.toString());
+		
+		DoublyLinkedList<Integer> intDLL = new DoublyLinkedList<Integer>();
+		intDLL.enqueue(1);
+		intDLL.enqueue(1);
+		intDLL.enqueue(1);
+		intDLL.enqueue(2);
+		intDLL.enqueue(2);
+		intDLL.enqueue(2);
+		intDLL.makeUnique();
+		
+		assertEquals("Check unique list", "2,1", intDLL.toString());
+		
 	}
 	// TODO: add more tests here. Each line of code in DoublyLinkedList.java should
 	// be executed at least once from at least one test.

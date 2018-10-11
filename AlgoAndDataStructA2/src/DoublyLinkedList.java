@@ -74,12 +74,11 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * 
 	 * @return true if list is empty, and false otherwise
 	 *
-	 *         Worst-case asymptotic running time cost: Theta(1)
+	 *         Worst-case asymptotic running time cost: O(1)
 	 *
 	 *         Justification: There single if statement (which we assume to take
-	 *         Theta(1) time to execute) does not change with the size of the list
-	 *         and therefore will always have an asymptotic running time of
-	 *         Theta(1).
+	 *         O(1) time to execute) does not change with the size of the list and
+	 *         therefore will always have an asymptotic running time of O(1).
 	 */
 	public boolean isEmpty() {
 		if (listSize < 1)
@@ -98,36 +97,39 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * @param data : The new data of class T that needs to be added to the list
 	 * @return none
 	 *
-	 *         Worst-case asymptotic running time cost: Theta(N/2)
+	 *         Worst-case asymptotic running time cost: O(N)
 	 *
 	 *         Justification: We have assumed the cost of inserting an element to be
 	 *         O(1). The if statement at the start takes constant time again. The
 	 *         for loop can run a maximum of N/2 times, therefore the worst case
-	 *         running time is Theta(N/2), with N being the size of the list.
+	 *         running time is O(N/2) -> O(N), with N being the size of the list.
+	 *         The if statements at the start have constant running time of O(1),
+	 *         therefore we can ignore their effect.
 	 */
 	public void insertBefore(int pos, T data) {
-		if (isEmpty()) {
+		if (isEmpty()) {// first obj, head = tail = obj
 			head = new DLLNode(data, null, null);
 			tail = head;
 			listSize++;
 			return;
-		} else if (listSize == 1) {
-			if (pos <= 0) {
+		} else if (listSize == 1) {// only one obj in list
+			if (pos <= 0) {// insert as first obj
 				head = new DLLNode(data, null, tail);
+
 				tail.prev = head;
-			} else {
+			} else {// insert as second obj
 				tail = new DLLNode(data, head, null);
 				head.next = tail;
 			}
 			listSize++;
 			return;
-		} else if (pos <= 0) {
+		} else if (pos <= 0) {// insert as first object
 			DLLNode tmpNode = new DLLNode(data, null, head);
 			head.prev = tmpNode;
 			head = tmpNode;
 			listSize++;
 			return;
-		} else if (pos >= listSize) {
+		} else if (pos >= listSize) {// insert as last object
 			DLLNode tmpNode = new DLLNode(data, tail, null);
 			tail.next = tmpNode;
 			tail = tmpNode;
@@ -168,9 +170,12 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * @return the data at pos, if pos is within the bounds of the list, and null
 	 *         otherwise.
 	 *
-	 *         Worst-case asymptotic running time cost: TODO
+	 *         Worst-case asymptotic running time cost: O(N)
 	 *
-	 *         Justification: TODO
+	 *         Justification: the getObjAt function has a worst case running time of
+	 *         O(N) and since this function only calls that function (and runs a
+	 *         constant time test (if) which we can ignore), the running time is
+	 *         O(N).
 	 *
 	 */
 	public T get(int pos) {
@@ -181,10 +186,12 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	}
 
 	/*
-	 * Running time: Theta(N/2) Justification: Before running the function
-	 * determines which half of the list to run the search on, therefore in the
-	 * worst case, the for loop runs for N/2 iterations (with N being the size of
-	 * the list).
+	 * Running time: O(N)
+	 * 
+	 * Justification: Before running, the function determines which half of the list
+	 * to run the search on, therefore in the worst case, the for loop runs for N/2
+	 * (N/2 -> N) iterations (with N being the size of the list). The if statements
+	 * are assumed to have constant running time and can therefore be ignored.
 	 */
 
 	private DLLNode getObjAt(int pos) {
@@ -215,24 +222,42 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * @param pos : the position to delete in the list.
 	 * @return true : on successful deletion, false : list has not been modified.
 	 *
-	 *         Worst-case asymptotic running time cost: TODO
+	 *         Worst-case asymptotic running time cost: O(N)
 	 *
-	 *         Justification: TODO
+	 *         Justification: The getObjAt function has a running time of N and the
+	 *         delNode function has a constant running time. O(1) + O(N) = O(N)
 	 */
 	public boolean deleteAt(int pos) {
 		DLLNode tmpNode = getObjAt(pos);
 		return delNode(tmpNode);
 	}
 
+	/*
+	 * Worst-case asymptotic running time cost: O(1)
+	 *
+	 * Justification: we have assumed all java functions have constant running time.
+	 * This means that in the worst case we have O(1) * O(1) * O(1) running time
+	 * which is O(1).
+	 */
 	private boolean delNode(DLLNode node) {
-		if (node != null && listSize > 1) {
-			node.prev.next = node.next;
-			node.next.prev = node.prev;
-			node = null;
+		if (node != null) {// the node exists
+			if (node.prev != null) {// node is not head
+				node.prev.next = node.next;
+			} else { // node is head
+				head = node.next;
+				if (head != null)
+					head.prev = null;
+			}
+			if (node.next != null) {// node is not tail
+				node.next.prev = node.prev;
+			} else {// node is tail
+				tail = node.prev;
+				if (tail != null)
+					tail.next = null;
+			}
+			node = null;// delete the node
 			listSize--;
 			return true;
-		}else {
-			
 		}
 		return false;
 	}
@@ -241,61 +266,93 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * Reverses the list. If the list contains "A", "B", "C", "D" before the method
 	 * is called Then it should contain "D", "C", "B", "A" after it returns.
 	 *
-	 * Worst-case asymptotic running time cost: TODO
+	 * Worst-case asymptotic running time cost: O(N)
 	 *
-	 * Justification: TODO
+	 * Justification: The loop runs N/2 times and
 	 */
+
 	public void reverse() {
 		if (!isEmpty()) {
-			for (int i = 0; i <= listSize / 2; i++) {
-				if (i == 0) {
-					swapElems(getObjAt(i), getObjAt((listSize - 1) - i));
-				} else {
-					swapElems(getObjAt(i), getObjAt((listSize - 1) - i));
-				}
+			DLLNode fNode = head;// first obj
+			DLLNode lNode = tail;// last obj
+			for (int i = 0; i < listSize / 2; i++) {
+				DLLNode fTmp = fNode.next;// first obj
+				DLLNode lTmp = lNode.prev;// last obj
+				swapElems(fNode, lNode);
+				fNode = fTmp;
+				lNode = lTmp;
 			}
 		}
 	}
+
+	/*
+	 * Worst case running time cost: O(1)
+	 * 
+	 * Justification: each of the operations has O(1) running time. O(1) + O(1) +
+	 * .... = O(1)
+	 */
 
 	private void swapElems(DLLNode first, DLLNode second) {
 		DLLNode tmpFirst = new DLLNode(first.data, first.prev, first.next);
 		DLLNode tmpSecond = new DLLNode(second.data, second.prev, second.next);
 
 		second.prev = tmpFirst.prev;
-		second.next = tmpFirst.next;
-		first.prev = tmpSecond.prev;
+		if (tmpFirst.next != second)// 2 items not next to each other
+			second.next = tmpFirst.next;
+		else
+			second.next = first;
+
 		first.next = tmpSecond.next;
+		if (tmpSecond.prev != first)// 2 items not next to each other
+			first.prev = tmpSecond.prev;
+		else
+			first.prev = second;
+
+		if (tmpFirst.prev == null) {
+			head = second;
+			tail = first;
+		}
+
 		if (second.prev != null)
 			second.prev.next = second;
-		if (second.next != null)
-			second.next.prev = second;
-		if (first.prev != null)
-			first.prev.next = first;
+		second.next.prev = second;
 		if (first.next != null)
 			first.next.prev = first;
+		first.prev.next = first;
 	}
 
 	/**
 	 * Removes all duplicate elements from the list. The method should remove the
-	 * _least_number_ of elements to make all elements uniqueue. If the list
-	 * contains "A", "B", "C", "B", "D", "A" before the method is called Then it
-	 * should contain "A", "B", "C", "D" after it returns. The relative order of
-	 * elements in the resulting list should be the same as the starting list.
+	 * _least_number_ of elements to make all elements unique. If the list contains
+	 * "A", "B", "C", "B", "D", "A" before the method is called Then it should
+	 * contain "A", "B", "C", "D" after it returns. The relative order of elements
+	 * in the resulting list should be the same as the starting list.
 	 *
-	 * Worst-case asymptotic running time cost: TODO
+	 * Worst-case asymptotic running time cost: O(N^2)
 	 *
-	 * Justification: TODO
+	 * Justification: the outer loop runs N times and the inner loop runs N-1 times.
+	 * This results in N * (N - 1) -> N^2 - N -> N^2 as all other operations are
+	 * constant time.
 	 */
-	public void makeUniqueue() {
-		for (int i = 0; i < listSize - 2; i++) {
-			DLLNode primNode = getObjAt(i);
+	public void makeUnique() {
+		DLLNode primNode = head;
+		for (int i = 0; i < listSize - 1; i++) {
+			DLLNode tmp = primNode.next;
 			for (int j = i + 1; j < listSize; j++) {
-				DLLNode tmp = getObjAt(j);
-				if (primNode.data.equals(tmp.data))
-					delNode(tmp);
+				if (primNode.data.equals(tmp.data)) {
+					tmp = tmp.next;
+					if (tmp != null)
+						delNode(tmp.prev);
+					else
+						delNode(tail);
+					j--;
+				} else
+					tmp = tmp.next;
 			}
+			primNode = primNode.next;
 		}
 	}
+
 
 	/*----------------------- STACK API 
 	 * If only the push and pop methods are called the data structure should behave like a stack.
@@ -307,9 +364,10 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * 
 	 * @param item : the item to push on the stack
 	 *
-	 *             Worst-case asymptotic running time cost: TODO
+	 *             Worst-case asymptotic running time cost: O(1)
 	 *
-	 *             Justification: TODO
+	 *             Justification: insertBefore has constant running time when the
+	 *             location is -1.
 	 */
 	public void push(T item) {
 		insertBefore(-1, item);
@@ -321,9 +379,11 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * 
 	 * @return the last item inserted with a push; or null when the list is empty.
 	 *
-	 *         Worst-case asymptotic running time cost: TODO
+	 *         Worst-case asymptotic running time cost: O(1)
 	 *
-	 *         Justification: TODO
+	 *         Justification: getObjAt has constant running time for first item in
+	 *         the list. All other items also have constant running time. O(1) +
+	 *         O(1) + .... = O(1)
 	 */
 	public T pop() {
 		if (!isEmpty()) {
@@ -345,24 +405,27 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 * 
 	 * @param item : the item to be enqueued to the stack
 	 *
-	 *             Worst-case asymptotic running time cost: TODO
+	 *             Worst-case asymptotic running time cost: O(1)
 	 *
-	 *             Justification: TODO
+	 *             Justification: insertBefore has constant running time for
+	 *             location -1.
 	 */
 	public void enqueue(T item) {
-		insertBefore(0 , item);
+		insertBefore(0, item);
 	}
 
 	/**
 	 * This method returns and removes the element that was least recently added by
 	 * the enqueue method.
 	 * 
-	 * @return the earliest item inserted with an equeue; or null when the list is
+	 * @return the earliest item inserted with an enqueue; or null when the list is
 	 *         empty.
 	 *
-	 *         Worst-case asymptotic running time cost: TODO
+	 *         Worst-case asymptotic running time cost: O(1)
 	 *
-	 *         Justification: TODO
+	 *         Justification: getObjAt has constant running time for the last item
+	 *         in the list. All other operations are constant time. O(1) + O(1) +
+	 *         .... = O(1)
 	 */
 	public T dequeue() {
 		if (!isEmpty()) {

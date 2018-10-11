@@ -72,14 +72,13 @@ public class ArithTest {
 	@Test
 	public void testValid() {
 		boolean expectedResult = true;
-		String[] theInput = {"+", "*", "-", "1", "2", "3", "-", "10", "+", "3", "/", "6", "3"};
-		assertEquals("validatePrefixOrder failed with a valid array", expectedResult,
-				Arith.validatePrefixOrder(theInput));
-		
-
-		String[] input = {"3", "7", "2", "+", "/"};
-		assertEquals("validatePrefixOrder failed with a valid array", expectedResult,
+		String[] input = {"3", "7", "2", "+", "/",};
+		assertEquals("validatePostfixOrder failed with a valid array", expectedResult,
 				Arith.validatePostfixOrder(input));
+		
+		String[] theInput = {"+","*", "-", "1", "2", "3", "-", "10", "+", "3", "/", "6", "3"};
+		assertEquals("validatePrefixOrder failed with a valid array", expectedResult,
+				Arith.validatePrefixOrder(theInput));	
 	}
 
 }

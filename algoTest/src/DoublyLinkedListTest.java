@@ -172,16 +172,30 @@ public class DoublyLinkedListTest {
 		testDLL.insertBefore(4, 3);
 		testDLL.insertBefore(4, 2);
 
-		testDLL.makeUniqueue();
+		testDLL.makeUnique();
 		
+		assertEquals("Check reverse list", "1,2,3,4", testDLL.toString());
+		
+		testDLL.makeUnique();
 		assertEquals("Check reverse list", "1,2,3,4", testDLL.toString());
 		
 		DoublyLinkedList<String> strDLL = new DoublyLinkedList<String>();
 		strDLL.enqueue("test");
 		strDLL.enqueue("test");
-		strDLL.makeUniqueue();
-		System.out.println(strDLL.toString());
+		strDLL.makeUnique();
 		assertEquals("Check unique list", "test", strDLL.toString());
+		
+		DoublyLinkedList<Integer> intDLL = new DoublyLinkedList<Integer>();
+		intDLL.enqueue(1);
+		intDLL.enqueue(1);
+		intDLL.enqueue(1);
+		intDLL.enqueue(2);
+		intDLL.enqueue(2);
+		intDLL.enqueue(2);
+		intDLL.makeUnique();
+		
+		System.out.println(intDLL.toString());
+		assertEquals("Check unique list", "2,1", intDLL.toString());
 		
 	}
 	// TODO: add more tests here. Each line of code in DoublyLinkedList.java should

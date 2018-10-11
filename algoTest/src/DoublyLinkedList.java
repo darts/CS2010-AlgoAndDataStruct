@@ -259,13 +259,15 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 *
 	 * Justification: TODO
 	 */
-	public void makeUniqueue() {
+	public void makeUnique() {
 		for (int i = 0; i < listSize - 1; i++) {
 			DLLNode primNode = getObjAt(i);
 			for (int j = i + 1; j < listSize; j++) {
 				DLLNode tmp = getObjAt(j);
-				if (primNode.data.equals(tmp.data))
+				if (primNode.data.equals(tmp.data)) {
 					delNode(tmp);
+					j--;
+				}
 			}
 		}
 	}
