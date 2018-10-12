@@ -8,11 +8,12 @@
  */
 
 public class Arith {
-	private static final String EMPTY = "$";
 	private static final String PLUS = "+";
 	private static final String MINUS = "-";
 	private static final String MULT = "*";
 	private static final String DIV = "/";
+	private static final String L_BRACKET = "(";
+	private static final String R_BRACKET = ")";
 
 	// ~ Validation methods
 	// ..........................................................
@@ -47,18 +48,11 @@ public class Arith {
 	}
 
 	// Is it an operand
-	static boolean isOperator(String theOp) {
+	private static boolean isOperator(String theOp) {
 		if (theOp.equals(PLUS) || theOp.equals(MINUS) || theOp.equals(DIV) || theOp.equals(MULT))
 			return true;
 		return false;
 	}
-
-//  static boolean stringCharsValid(String theString[]) {
-//	  for(int i = 0; i < theString.length; i++) {
-//		  if(isOperator(theString[i])
-//	  }
-//	  return true;
-//  }
 
 	/**
 	 * Validation method for postfix notation.
@@ -71,51 +65,24 @@ public class Arith {
 	 * @return true if the parameter is indeed in postfix notation, and false
 	 *         otherwise.
 	 **/
+
 	public static boolean validatePostfixOrder(String postfixLiterals[]) {
 		if (postfixLiterals == null || postfixLiterals.length == 0)
 			return false;
-		while (moreThanOnePopulated(postfixLiterals)) {
-			int op = findLeftMostOperand(postfixLiterals);
-			int[] lNum = findRightMostInts(postfixLiterals);
-			if (op == -1 || op < lNum[0] || lNum[1] == -1) {// more than 1 item left in the array and no operands,
-															// operand is
-				// ahead of numbers, no numbers left
-				return false;
-			} else {
-				postfixLiterals[op] = EMPTY;
-				postfixLiterals[lNum[0]] = EMPTY;
+		int counter = 0;
+		for (int i = 0; i < postfixLiterals.length; i++) {
+			if (!isOperator(postfixLiterals[i]))
+				counter++;
+			else {
+				counter -= 2;
+				if (counter < 0)
+					return false;
+				counter++;
 			}
 		}
-		return true;
-	}
-
-	// find the left most operand starting from the left of the array (0)
-	static int findLeftMostOperand(String[] theArray) {
-		int mostLeft = -1;
-		for (int i = 0; i < theArray.length; i++) {
-			String theChar = theArray[i];
-			if (isOperator(theChar)) {
-				return i;
-			}
-
-		}
-		return mostLeft;
-	}
-
-	// Find the right most ints starting from the left of the array (0)
-	static int[] findRightMostInts(String[] theArray) {
-		int[] mostRight = { -1, -1 };
-		for (int i = 0; i < theArray.length; i++) {
-			String theChar = theArray[i];
-			if (theChar.equals(EMPTY)) {
-			} else if (!isOperator(theChar)) {
-				mostRight[1] = mostRight[0];
-				mostRight[0] = i;
-			} else {
-				return mostRight;
-			}
-		}
-		return mostRight;
+		if (counter == 1)
+			return true;
+		return false;
 	}
 
 	// ~ Evaluation methods
@@ -126,75 +93,38 @@ public class Arith {
 	 *
 	 * @param prefixLiterals : an array containing the string literals in prefix
 	 *                       order. The method assumes that each of these literals
-	 *                       can be one of: - "+", "-", "*", or "/" - or a valid
-	 *                       string representation of an integer.
+	 *                       can be one of: "+", "-", "*", or "/" or a valid string
+	 *                       representation of an integer.
 	 *
-	 * @return the integer result of evaluating the expression Method: 1)Take the
-	 *         farthest right operand in a row (+ - / 2 4 5 -> /)
-	 * 
-	 *         2)Perform calculation on subsequent two numbers (+ - / 2 4 5 -> 2 /
-	 *         4). Store result in location of the second number. ( + - / 2 4 5 -> +
-	 *         - / 2 2 5).
-	 * 
-	 *         3) Replace the operand and first number with EMPTY, (+ - / 2 2 5 -> +
-	 *         - EMPTY EMPTY 2 5).
+	 * @return the integer result of evaluating the expression.
 	 * 
 	 **/
+
 	public static int evaluatePrefixOrder(String prefixLiterals[]) {
-		if (prefixLiterals == null || prefixLiterals.length == 0)
-			return -1;
-		while (moreThanOnePopulated(prefixLiterals)) {
-			int op = findRightMostOperand(prefixLiterals);
-			int[] lNum = findLeftMostInts(prefixLiterals);
-			if (op == -1 || op > lNum[0] || lNum[1] == -1) {// more than 1 item left in the array and no operands,
-															// operand is
-				// ahead of numbers, no numbers left
-				return -1;
+		int[] numStack = new int[(prefixLiterals.length / 2) + 1];
+		int lastDigitPointer = -1;
+		for (int i = prefixLiterals.length - 1; i >= 0; i--) {
+			if (isOperator(prefixLiterals[i])) {
+				numStack[lastDigitPointer - 1] = performCalc(prefixLiterals[i], numStack[lastDigitPointer],
+						numStack[lastDigitPointer - 1]);
+				lastDigitPointer--;
 			} else {
-				prefixLiterals[op] = EMPTY;
-				prefixLiterals[lNum[0]] = EMPTY;
-
+				numStack[lastDigitPointer + 1] = Integer.parseInt(prefixLiterals[i]);
+				lastDigitPointer++;
 			}
 		}
-		return -1;
+		return numStack[0];
 	}
 
-	// Find the two left most ints starting from the right side of the array
-	static int[] findLeftMostInts(String[] theArray) {
-		int[] mostLeft = { -1, -1 };
-		for (int i = theArray.length - 1; i >= 0; i--) {
-			String theChar = theArray[i];
-			if (isOperator(theChar)) {
-				return mostLeft;
-			} else if (!theChar.equals(EMPTY)) {
-				mostLeft[1] = mostLeft[0];
-				mostLeft[0] = i;
-			}
-		}
-		return mostLeft;
-	}
-
-	// Find the right most operand starting from the right side of the array
-	static int findRightMostOperand(String[] theArray) {
-		for (int i = theArray.length - 1; i >= 0; i--) {
-			String theChar = theArray[i];
-			if (isOperator(theChar))
-				return i;
-		}
-		return -1;
-	}
-
-	// More than 1 element remaining in the array
-	static boolean moreThanOnePopulated(String[] theArray) {
-		int count = 0;
-		for (int i = 0; i < theArray.length; i++) {
-			if (!theArray[i].equals(EMPTY))
-				count++;
-			if (count > 1)
-				return true;
-		}
-		return false;
-
+	private static int performCalc(String op, int opL, int opR) {
+		if (op.equals(PLUS))
+			return opL + opR;
+		else if (op.equals(MULT))
+			return opL * opR;
+		else if (op.equals(MINUS))
+			return opL - opR;
+		else
+			return opL / opR;
 	}
 
 	/**
@@ -208,8 +138,19 @@ public class Arith {
 	 * @return the integer result of evaluating the expression
 	 **/
 	public static int evaluatePostfixOrder(String postfixLiterals[]) {
-		// TODO
-		return -1;
+		int[] numStack = new int[(postfixLiterals.length / 2) + 1];
+		int lastDigitPointer = -1;
+		for (int i = 0; i < postfixLiterals.length; i++) {
+			if (isOperator(postfixLiterals[i])) {
+				numStack[lastDigitPointer - 1] = performCalc(postfixLiterals[i], numStack[lastDigitPointer - 1],
+						numStack[lastDigitPointer]);
+				lastDigitPointer--;
+			} else {
+				numStack[lastDigitPointer + 1] = Integer.parseInt(postfixLiterals[i]);
+				lastDigitPointer++;
+			}
+		}
+		return numStack[0];
 	}
 
 	// ~ Conversion methods
@@ -226,8 +167,26 @@ public class Arith {
 	 * @return the expression in postfix order.
 	 **/
 	public static String[] convertPrefixToPostfix(String prefixLiterals[]) {
-		// TODO
-		return null;
+		String[] resStack = new String[prefixLiterals.length];
+		int lastDigitPointer = -1;
+		for (int i = prefixLiterals.length - 1; i >= 0; i--) {
+			String itemRead = prefixLiterals[i];
+			if (isOperator(itemRead)) {
+				String conCat = resStack[lastDigitPointer] + " " + resStack[lastDigitPointer - 1] + " " + itemRead;
+				resStack[--lastDigitPointer] = conCat;
+			} else {
+				resStack[++lastDigitPointer] = itemRead;
+			}
+		}
+		String itemToDelimit = resStack[0];
+
+		String[] res = itemToDelimit.split(" ");
+		int i = 0;
+		for (int j = 0; j < res.length; j++) {
+			prefixLiterals[i++] = res[j];
+		}
+
+		return prefixLiterals;
 	}
 
 	/**
@@ -241,8 +200,26 @@ public class Arith {
 	 * @return the expression in prefix order.
 	 **/
 	public static String[] convertPostfixToPrefix(String postfixLiterals[]) {
-		// TODO
-		return null;
+		String[] resStack = new String[postfixLiterals.length];
+		int lastDigitPointer = -1;
+		for (int i = 0; i < postfixLiterals.length; i++) {
+			String itemRead = postfixLiterals[i];
+			if (isOperator(itemRead)) {
+				String conCat = itemRead + " " + resStack[lastDigitPointer - 1] + " " + resStack[lastDigitPointer];
+				resStack[--lastDigitPointer] = conCat;
+			} else {
+				resStack[++lastDigitPointer] = itemRead;
+			}
+		}
+		String itemToDelimit = resStack[0];
+
+		String[] res = itemToDelimit.split(" ");
+		int i = 0;
+		for (int j = 0; j < res.length; j++) {
+			postfixLiterals[i++] = res[j];
+		}
+
+		return postfixLiterals;
 	}
 
 	/**
@@ -256,8 +233,28 @@ public class Arith {
 	 * @return the expression in infix order.
 	 **/
 	public static String[] convertPrefixToInfix(String prefixLiterals[]) {
-		// TODO
-		return null;
+		String[] resStack = new String[prefixLiterals.length];
+		int lastDigitPointer = -1;
+		for (int i = prefixLiterals.length - 1; i >= 0; i--) {
+			String itemRead = prefixLiterals[i];
+			if (isOperator(itemRead)) {
+				String conCat = L_BRACKET + " " + resStack[lastDigitPointer--] + " " + itemRead + " "
+						+ resStack[lastDigitPointer] + " " + R_BRACKET;
+				resStack[lastDigitPointer] = conCat;
+			} else {
+				resStack[++lastDigitPointer] = itemRead;
+			}
+		}
+		String[] outStack = new String[(prefixLiterals.length * 2) - 1];
+		String itemToDelimit = resStack[0];
+		int i = 0;
+		String[] res = itemToDelimit.split(" ");
+		for (int j = 0; j < res.length; j++) {
+			outStack[i] = res[j];
+			i++;
+		}
+		
+		return outStack;
 	}
 
 	/**
@@ -271,8 +268,28 @@ public class Arith {
 	 * @return the expression in infix order.
 	 **/
 	public static String[] convertPostfixToInfix(String postfixLiterals[]) {
-		// TODO
-		return null;
+		String[] resStack = new String[postfixLiterals.length];
+		int lastDigitPointer = -1;
+		for (int i = 0; i < postfixLiterals.length; i++) {
+			String itemRead = postfixLiterals[i];
+			if (isOperator(itemRead)) {
+				String conCat = L_BRACKET + " " + resStack[lastDigitPointer - 1] + " " + itemRead + " "
+						+ resStack[lastDigitPointer--] + " " + R_BRACKET;
+				resStack[lastDigitPointer] = conCat;
+			} else {
+				resStack[++lastDigitPointer] = itemRead;
+			}
+		}
+		String[] outStack = new String[(postfixLiterals.length * 2) -1];
+		int i = 0;
+		String itemToDelimit = resStack[i];
+
+		String[] res = itemToDelimit.split(" ");
+		for (int j = 0; j < res.length; j++) {
+			outStack[i] = res[j];
+			i++;
+		}
+		return outStack;
 	}
 
 }
