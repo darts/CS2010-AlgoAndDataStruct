@@ -29,12 +29,19 @@ public class Arith {
 	 * @return true if the parameter is indeed in prefix notation, and false
 	 *         otherwise.
 	 * 
+	 * 
+	 *         Worst case running time: O(n)
+	 * 
+	 *         Reason: the first if statement takes constant time O(1) as each of
+	 *         the comparisons take constant time. The for loop runs n times. Inside
+	 *         the for loop are 2 constant time comparisons -> n * O(1) = O(n)
+	 * 
 	 **/
 	public static boolean validatePrefixOrder(String prefixLiterals[]) {
-		if (prefixLiterals == null || prefixLiterals.length == 0)
+		if (prefixLiterals == null || prefixLiterals.length == 0)// determine if the string can be valid
 			return false;
 		int counter = 1;
-		for (int i = 0; i < prefixLiterals.length; i++) {
+		for (int i = 0; i < prefixLiterals.length; i++) { // step through each element in the array
 			if (counter <= 0)
 				return false;
 			if (isOperator(prefixLiterals[i]))
@@ -47,7 +54,13 @@ public class Arith {
 		return false;
 	}
 
-	// Is it an operand
+	// Determine if a given string is an operand.
+	// Worst case running time: O(1)
+	//
+	// The String.equals() function has a running time of O(n) where n is the length
+	// of the string. In this case the length is 1 -> the function has a running
+	// time of O(1). This results in a running time for the function of O(1) * 4 =
+	// O(1). (src. java docs).
 	private static boolean isOperator(String theOp) {
 		if (theOp.equals(PLUS) || theOp.equals(MINUS) || theOp.equals(DIV) || theOp.equals(MULT))
 			return true;
@@ -253,7 +266,7 @@ public class Arith {
 			outStack[i] = res[j];
 			i++;
 		}
-		
+
 		return outStack;
 	}
 
@@ -280,7 +293,7 @@ public class Arith {
 				resStack[++lastDigitPointer] = itemRead;
 			}
 		}
-		String[] outStack = new String[(postfixLiterals.length * 2) -1];
+		String[] outStack = new String[(postfixLiterals.length * 2) - 1];
 		int i = 0;
 		String itemToDelimit = resStack[i];
 
@@ -293,3 +306,11 @@ public class Arith {
 	}
 
 }
+
+/*
+ * Data Structures Used In Code: Array (String and Int)
+ * 
+ * 
+ * 
+ * 
+ */

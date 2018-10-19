@@ -54,3 +54,21 @@ AlgoAndDataStructAs2/.project
 *.log
 *.zip
 AlgoAndDataStructAs2/.classpath
+*.zip
+TelcoAssignment1/.classpath
+TelcoAssignment1/.project
+TelcoAssignment1/src/AckPacketContent.java
+TelcoAssignment1/src/Broker.java
+TelcoAssignment1/src/FileInfoContent.java
+TelcoAssignment1/src/message.txt
+TelcoAssignment1/src/Node.java
+TelcoAssignment1/src/packet.java
+TelcoAssignment1/src/PacketContent.java
+TelcoAssignment1/src/Publisher.java
+TelcoAssignment1/src/pushFile.txt
+TelcoAssignment1/src/ReceiverProcess.java
+TelcoAssignment1/src/SenderProcess.java
+TelcoAssignment1/src/StringContent.java
+TelcoAssignment1/src/Subscriber.java
+*.zip
+AlgoAndDataStructA2/src/Compressed file.zip

@@ -268,7 +268,8 @@ class DoublyLinkedList<T extends Comparable<T>> {
 	 *
 	 * Worst-case asymptotic running time cost: O(N)
 	 *
-	 * Justification: The loop runs N/2 times and
+	 * Justification: The loop runs N/2 times and each of the internal functions
+	 * have constant running time so O(N/2) * (O(1) + O(1)+...+O(1)) = O(N/2) = O(N)
 	 */
 
 	public void reverse() {
@@ -352,7 +353,6 @@ class DoublyLinkedList<T extends Comparable<T>> {
 			primNode = primNode.next;
 		}
 	}
-
 
 	/*----------------------- STACK API 
 	 * If only the push and pop methods are called the data structure should behave like a stack.
