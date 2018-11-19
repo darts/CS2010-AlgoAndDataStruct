@@ -221,14 +221,12 @@ public class BST<Key extends Comparable<Key>, Value> {
 		delete(root, key);
 	}
 	
-	private Node getAndDelLargest(Node theNode) {
+	private Node getLargestInTree(Node theNode, Node prevNode) {
 		if(theNode.right == null) {
-			Node tmpNode = theNode;
-			delete(theNode, theNode.key);
-			return tmpNode;
-		}else {
-			return getAndDelLargest(theNode.right);
-		}	
+			prevNode.right = theNode.left;
+			return theNode;
+		}else
+			return getLargestInTree(theNode.right, theNode);
 	}
 
 	private Node delete(Node theNode, Key theKey) {
@@ -247,10 +245,10 @@ public class BST<Key extends Comparable<Key>, Value> {
 			return theNode.left;
 		if(theNode.left == null) //this is the key and no left tree
 			return theNode.right;
-		Node newNode = getAndDelLargest(theNode.left);
-		newNode.left = theNode.left;
-		newNode.right = theNode.right;
-		return newNode;
+		Node retNode = getLargestInTree(theNode.left.right, theNode.left);
+		retNode.left = theNode.left;
+		retNode.right = theNode.right;
+		return retNode;
+//		return theNode;
 	}
-
 }
