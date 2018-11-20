@@ -108,9 +108,30 @@ public class BSTTest
 		bst.put(6, 6);
 		bst.put(8, 8);
 		bst.delete(7);
-		System.out.println(bst.printKeysInOrder());
 		assertEquals("Deleting root with two children", "((()4(()5()))7(()8()))", bst.printKeysInOrder());
-	}
+	 }
      
+     
+     @Test
+     public void testMedian() {
+    	 BST<Integer, Integer> bst = new BST<Integer, Integer>();
+//    	 assertEquals("Testing getting median with empty bst", null,bst.median());
+    	 
+    	 bst.put(10, 10);
+    	 bst.put(5, 5);
+    	 bst.put(15,15);
+//    	 assertEquals("Testing getting median on root","10",Integer.toString(bst.median()));
+    	 
+    	 bst.put(9, 9);
+//    	 assertEquals("Testing getting median on odd number N", "9", Integer.toString(bst.median()));
+    	 
+    	 bst.put(4, 4);
+//    	 assertEquals("Testing getting median on odd number N", "9", Integer.toString(bst.median()));
+     
+    	 bst.put(8, 8);
+    	 bst.put(6, 6);
+    	 bst.put(7, 7);
+    	 assertEquals("Testing getting median on odd number N", "7", Integer.toString(bst.median()));
+     }
 }
 
