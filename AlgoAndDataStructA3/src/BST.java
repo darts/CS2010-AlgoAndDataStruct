@@ -9,7 +9,6 @@
  *
  *************************************************************************/
 
-import java.util.NoSuchElementException;
 
 public class BST<Key extends Comparable<Key>, Value> {
 	private Node root; // root of BST
@@ -147,8 +146,6 @@ public class BST<Key extends Comparable<Key>, Value> {
 		if (isEmpty())
 			return null;
 		return median(root, size(), (size() + 1) / 2);
-		// TODO fill in the correct implementation. The running time should be Theta(h),
-		// where h is the height of the tree.
 	}
 
 	private Key median(Node theNode, int smallerNodes, int median) {
@@ -186,8 +183,6 @@ public class BST<Key extends Comparable<Key>, Value> {
 	private String getOrderString(Node theNode) {
 		if (theNode == null)
 			return "()";
-//		System.out.println("(" + getOrderString(theNode.left) + theNode.key + getOrderString(theNode.right) + ")");
-//		System.out.flush();
 		return "(" + getOrderString(theNode.left) + theNode.key + getOrderString(theNode.right) + ")";
 	}
 
@@ -199,7 +194,6 @@ public class BST<Key extends Comparable<Key>, Value> {
 	 */
 	public String prettyPrintKeys() {
 		return prettyPrint(root, "");
-//return null;
 	}
 
 	private String prettyPrint(Node theNode, String prefix) {
@@ -210,7 +204,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 	}
 
 	/**
-	 * Deteles a key from a tree (if the key is in the tree). Note that this method
+	 * Deletes a key from a tree (if the key is in the tree). Note that this method
 	 * works symmetrically from the Hibbard deletion: If the node to be deleted has
 	 * two child nodes, then it needs to be replaced with its predecessor (not its
 	 * successor) node.
@@ -249,6 +243,5 @@ public class BST<Key extends Comparable<Key>, Value> {
 		retNode.left = theNode.left;
 		retNode.right = theNode.right;
 		return retNode;
-//		return theNode;
 	}
 }

@@ -25,8 +25,7 @@ public class BSTTest
  @Test
  public void testPrettyPrint() {
      BST<Integer, Integer> bst = new BST<Integer, Integer>();
-     assertEquals("Checking pretty printing of empty tree",
-             "-null\n", bst.prettyPrintKeys());
+		assertEquals("Checking pretty printing of empty tree", "-null\n", bst.prettyPrintKeys());
       
                           //  -7
                           //   |-3
@@ -84,26 +83,34 @@ public class BSTTest
          bst.put(4, 4);   //   2   4
          bst.put(5, 5);   //        \
                           //         5
-         
-         assertEquals("Checking order of constructed tree",
-                 "(((()1(()2()))3((()4(()5()))6()))7(()8()))", bst.printKeysInOrder());
-         
-         bst.delete(9);
-         assertEquals("Deleting non-existent key",
-                 "(((()1(()2()))3((()4(()5()))6()))7(()8()))", bst.printKeysInOrder());
- 
-         bst.delete(8);
-         assertEquals("Deleting leaf", "(((()1(()2()))3((()4(()5()))6()))7())", bst.printKeysInOrder());
- 
-         bst.delete(6);
-         assertEquals("Deleting node with single child",
-                 "(((()1(()2()))3(()4(()5())))7())", bst.printKeysInOrder());
- 
-         bst.delete(3);
-         assertEquals("Deleting node with two children",
-                 "(((()1())2(()4(()5())))7())", 
-                 bst.printKeysInOrder());
-     }
+
+		assertEquals("Checking order of constructed tree", "(((()1(()2()))3((()4(()5()))6()))7(()8()))",
+				bst.printKeysInOrder());
+
+		bst.delete(9);
+		assertEquals("Deleting non-existent key", "(((()1(()2()))3((()4(()5()))6()))7(()8()))", bst.printKeysInOrder());
+
+		bst.delete(8);
+		assertEquals("Deleting leaf", "(((()1(()2()))3((()4(()5()))6()))7())", bst.printKeysInOrder());
+
+		bst.delete(6);
+		assertEquals("Deleting node with single child", "(((()1(()2()))3(()4(()5())))7())", bst.printKeysInOrder());
+
+		bst.delete(3);
+		assertEquals("Deleting node with two children", "(((()1())2(()4(()5())))7())", bst.printKeysInOrder());
+		
+		bst.delete(1);
+		assertEquals("Deleting node with single child", "((()2(()4(()5())))7())", bst.printKeysInOrder());
+		
+		bst.delete(2);
+		assertEquals("Deleting node with single child", "((()4(()5()))7())", bst.printKeysInOrder());
+		
+		bst.put(6, 6);
+		bst.put(8, 8);
+		bst.delete(7);
+		System.out.println(bst.printKeysInOrder());
+		assertEquals("Deleting root with two children", "((()4(()5()))7(()8()))", bst.printKeysInOrder());
+	}
      
 }
 
