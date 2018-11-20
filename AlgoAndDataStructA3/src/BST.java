@@ -111,7 +111,8 @@ public class BST<Key extends Comparable<Key>, Value> {
 	/**
 	 * Tree height.
 	 *
-	 * Asymptotic worst-case running time using Theta notation: TODO
+	 * Asymptotic worst-case running time using Theta notation: O(N) - with N being the number of nodes in the tree.
+	 * Justification: In the worst case the function will traverse every node in the tree -> O(N)
 	 *
 	 * @return the number of links from the root to the deepest leaf.
 	 *
@@ -120,17 +121,16 @@ public class BST<Key extends Comparable<Key>, Value> {
 	 *         Example 3: for the following tree it should return 2. B / \ A C \ D
 	 */
 	public int height() {
-		height(root, 0);
-		return -1;
+		return height(root, 0);
 	}
 
 	private int height(Node theNode, int height) {
 		if (theNode == null)
 			return -1;
 		int leftHeight = height(theNode.left, height + 1);
-		if (leftHeight > height)
-			return leftHeight;
 		int rightHeight = height(theNode.right, height + 1);
+		if (leftHeight > height && leftHeight > rightHeight)
+			return leftHeight;
 		if (rightHeight > height)
 			return rightHeight;
 		return height;

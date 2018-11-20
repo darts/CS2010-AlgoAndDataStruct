@@ -133,5 +133,49 @@ public class BSTTest
     	 bst.put(7, 7);
     	 assertEquals("Testing getting median on odd number N", "7", Integer.toString(bst.median()));
      }
+     
+     @Test 
+     public void testHeight() {
+    	 BST<Integer, Integer> bst = new BST<Integer, Integer>();
+    	 assertEquals("Testing height with empty bst.", -1, bst.height());
+    	 
+    	 bst.put(10, 10);
+    	 assertEquals("Testing height with one item.", 0, bst.height());
+    	 
+    	 bst.put(5, 5);
+    	 assertEquals("Testing height with left subtree being tallest.", 1, bst.height());
+    	 
+    	 bst.put(12, 12);
+    	 bst.put(15, 15);
+    	 assertEquals("Testing height with right subtree being tallest.", 2, bst.height());
+     }
+     
+     @Test
+     public void testGet() {
+    	 BST<Integer, Integer> bst = new BST<Integer, Integer>();
+    	 assertEquals("Testing get null with empty bst", null, bst.get(null));
+    	 assertEquals("Testing get with empty bst", null, bst.get(10));
+    	
+    	 bst.put(10, 10);
+    	 assertEquals("Testing get with one node", "10", Integer.toString(bst.get(10)));
+    	 
+    	 bst.put(10, null);
+    	 bst.put(10,10);
+    	 bst.put(15, 15);
+    	 assertEquals("Testing get with multiple nodes.", "15", Integer.toString(bst.get(15)));
+    	 
+    	 bst.put(5,5);
+    	 assertEquals("Testing get with multiple nodes.", "5", Integer.toString(bst.get(5)));
+     }
+     
+     @Test
+     public void testContains() {
+    	 BST<Integer, Integer> bst = new BST<Integer, Integer>();
+    	 assertEquals("Testing contains null with empty bst", false, bst.contains(null));
+    	 assertEquals("Testing contains with empty bst", false, bst.contains(10));
+    	 
+    	 bst.put(10, 10);
+    	 assertEquals("Testing contains with valid search.", true, bst.contains(10));
+     }
 }
 
