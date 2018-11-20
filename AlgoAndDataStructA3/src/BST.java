@@ -145,24 +145,16 @@ public class BST<Key extends Comparable<Key>, Value> {
 	public Key median() {
 		if (isEmpty())
 			return null;
-		return median(root, root.left.N, (size() + 1) / 2);
+		return median(root, (size() + 1) / 2);
 	}
-
-	private Key median(Node theNode, int smallerNodes, int median) {
-		if (smallerNodes == (median - 1))
+	
+	private Key median(Node theNode, int theTgt) {
+		int smallerNodes;
+		if((smallerNodes = size(theNode.left)) == theTgt - 1)
 			return theNode.key;
-		if (smallerNodes > (median - 1)) {
-			if(theNode.left.left == null)
-				smallerNodes = 0;
-			else
-				smallerNodes = theNode.left.left.N;
-			return median(theNode.left, smallerNodes, median);
-		}
-		if(theNode.right.left == null)
-			smallerNodes = smallerNodes + 1;
-		else
-			smallerNodes = smallerNodes + theNode.right.left.N;
-		return median(theNode.right, smallerNodes, median);
+		if(smallerNodes > theTgt - 1)
+			return median(theNode.left, theTgt);
+		return median(theNode.right, theTgt - (smallerNodes + 1));
 	}
 
 	/**

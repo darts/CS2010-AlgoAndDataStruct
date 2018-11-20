@@ -115,18 +115,18 @@ public class BSTTest
      @Test
      public void testMedian() {
     	 BST<Integer, Integer> bst = new BST<Integer, Integer>();
-//    	 assertEquals("Testing getting median with empty bst", null,bst.median());
+    	 assertEquals("Testing getting median with empty bst", null,bst.median());
     	 
     	 bst.put(10, 10);
     	 bst.put(5, 5);
     	 bst.put(15,15);
-//    	 assertEquals("Testing getting median on root","10",Integer.toString(bst.median()));
+    	 assertEquals("Testing getting median on root","10",Integer.toString(bst.median()));
     	 
     	 bst.put(9, 9);
-//    	 assertEquals("Testing getting median on odd number N", "9", Integer.toString(bst.median()));
+    	 assertEquals("Testing getting median on odd number N", "9", Integer.toString(bst.median()));
     	 
     	 bst.put(4, 4);
-//    	 assertEquals("Testing getting median on odd number N", "9", Integer.toString(bst.median()));
+    	 assertEquals("Testing getting median on odd number N", "9", Integer.toString(bst.median()));
      
     	 bst.put(8, 8);
     	 bst.put(6, 6);
