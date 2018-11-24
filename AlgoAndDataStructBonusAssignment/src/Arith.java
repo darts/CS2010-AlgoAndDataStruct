@@ -28,13 +28,17 @@ public class Arith {
 	 *
 	 * @return true if the parameter is indeed in prefix notation, and false
 	 *         otherwise.
-	 * 
-	 * 
-	 *         Worst case running time: O(n)
-	 * 
-	 *         Reason: the first if statement takes constant time O(1) as each of
-	 *         the comparisons take constant time. The for loop runs n times. Inside
-	 *         the for loop are 2 constant time comparisons -> n * O(1) = O(n)
+	 *
+	 *         Worst Case Running Time: O(N), Omega(1) 
+	 *         Note: N being the number of items in the array.
+	 *         Reason:The first if statement takes constant time O(1) as each of the 
+	 *         comparisons take constant time. The variable assignment also takes constant
+	 *         time O(1). The for-loop takes between O(1) and O(N) time as the loop can
+	 *         exit after 1 iteration if the counter variable reaches 0, or it can run
+	 *         N times if this does not happen. The final if statement takes constant
+	 *         time. 
+	 *         Worst case -> O(1) + O(N) + O(1) = O(N)
+	 *         Shortest possible time -> O(1) + O(1) + O(1) = O(1) -> Omega(1)
 	 * 
 	 **/
 	public static boolean validatePrefixOrder(String prefixLiterals[]) {
@@ -55,12 +59,13 @@ public class Arith {
 	}
 
 	// Determine if a given string is an operand.
-	// Worst case running time: O(1)
+	// Worst case running time: Theta(1)
 	//
 	// The String.equals() function has a running time of O(n) where n is the length
 	// of the string. In this case the length is 1 -> the function has a running
 	// time of O(1). This results in a running time for the function of O(1) * 4 =
-	// O(1). (src. java docs).
+	// O(1). (src. java docs). Since the function can only have constant running
+	// time, we can define it in a more tight bound as Theta(1).
 	private static boolean isOperator(String theOp) {
 		if (theOp.equals(PLUS) || theOp.equals(MINUS) || theOp.equals(DIV) || theOp.equals(MULT))
 			return true;
@@ -77,6 +82,19 @@ public class Arith {
 	 *
 	 * @return true if the parameter is indeed in postfix notation, and false
 	 *         otherwise.
+	 *         
+	 *         This function is very similar to the validatePrefixOrder() function.
+	 *         
+	 *         Worst Case Running Time: O(N), Omega(1) 
+	 *         Note: N being the number of items in the array.
+	 *         Reason:The first if statement takes constant time O(1) as each of the 
+	 *         comparisons take constant time. The variable assignment also takes constant
+	 *         time O(1). The for-loop takes between O(1) and O(N) time as the loop can
+	 *         exit after 1 iteration if the counter variable reaches 0, or it can run
+	 *         N times if this does not happen. The final if statement takes constant
+	 *         time. 
+	 *         Worst case -> O(1) + O(N) + O(1) = O(N)
+	 *         Shortest possible time -> O(1) + O(1) + O(1) = O(1) -> Omega(1)
 	 **/
 
 	public static boolean validatePostfixOrder(String postfixLiterals[]) {
@@ -129,6 +147,17 @@ public class Arith {
 		return numStack[0];
 	}
 
+	
+	/*
+	 * 	Worst case running time: Theta(1)
+	 *	Reason: the String.equals() function has a running time of O(N) where N 
+	 *	is the size of the string being compared. In this case however N = 1 so
+	 *	the function has a running time of 1. Arithmetic operations take constant 
+	 *  time O(1). Since each of the if statements are performed sequentially, we 
+	 *  get a running time of O(1) + O(1) + O(1) = O(1). But the function will 
+	 *  never be faster or slower than this so we can say the true running time 
+	 *  is Theta(1).
+	 */
 	private static int performCalc(String op, int opL, int opR) {
 		if (op.equals(PLUS))
 			return opL + opR;
@@ -308,9 +337,17 @@ public class Arith {
 }
 
 /*
- * Data Structures Used In Code: Array (String and Int)
+ * Data Structures Used In Code: 
+ * int (primitive)
+ * String (object)
+ * Array (String and int)
  * 
+ * Methods called for each Data Structure:
+ * int - none, item is primitive - has no functions
  * 
+ * String - .equals() method. This method runs in time O(N) where N are the number of items 
+ * 			in the String being compared. I used this method exclusively with strings of 
+ * 			size 1 which resulted in a running time of O(1) (also Theta(1)).
  * 
  * 
  */
