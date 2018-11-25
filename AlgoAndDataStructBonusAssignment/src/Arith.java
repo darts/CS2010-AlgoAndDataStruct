@@ -29,7 +29,12 @@ public class Arith {
 	 * @return true if the parameter is indeed in prefix notation, and false
 	 *         otherwise.
 	 *
-	 *         Worst Case Running Time: O(N), Omega(1) 
+	 *		   Optimality: I believe my implementation of this function is optimal as it 
+	 *		   has minimal memory usage (only 2 defined variables) and as soon as an array
+	 *		   is determined to be invalid, returns false. This prevents the wasting of 
+	 *		   compute time.
+	 *
+	 *         Worst Case Running cost: O(N), Omega(1) 
 	 *         Note: N being the number of items in the array.
 	 *         Reason:The first if statement takes constant time O(1) as each of the 
 	 *         comparisons take constant time. The variable assignment also takes constant
@@ -38,7 +43,7 @@ public class Arith {
 	 *         N times if this does not happen. The final if statement takes constant
 	 *         time. 
 	 *         Worst case -> O(1) + O(N) + O(1) = O(N)
-	 *         Shortest possible time -> O(1) + O(1) + O(1) = O(1) -> Omega(1)
+	 *         Shortest possible cost -> O(1) + O(1) + O(1) = O(1) -> Omega(1)
 	 * 
 	 **/
 	public static boolean validatePrefixOrder(String prefixLiterals[]) {
@@ -59,7 +64,14 @@ public class Arith {
 	}
 
 	// Determine if a given string is an operand.
-	// Worst case running time: Theta(1)
+	
+	//Optimality: I believe my implementation of this function is optimal as it 
+	//requires very little memory (the only variable is the one created by java
+	//when the function is called). It is also very light on compute time with
+	//the function returning a result as soon as it is available and not running
+	//redundant checks.
+	
+	// Worst case running cost: Theta(1)
 	//
 	// The String.equals() function has a running time of O(n) where n is the length
 	// of the string. In this case the length is 1 -> the function has a running
@@ -83,9 +95,13 @@ public class Arith {
 	 * @return true if the parameter is indeed in postfix notation, and false
 	 *         otherwise.
 	 *         
-	 *         This function is very similar to the validatePrefixOrder() function.
+	 *         Optimality: I believe my implementation of this function is optimal as it 
+	 *		   only creates two local variables (both ints -> 32 bits -> 64 bits total).
+	 *		   If the input is determined to be invalid, the function will immediately 
+	 *		   return false. This prevents the wasting of compute time. 
 	 *         
-	 *         Worst Case Running Time: O(N), Omega(1) 
+	 *         Note:This function is very similar to the validatePrefixOrder() function.
+	 *         Worst Case Running Cost: O(N), Omega(1) 
 	 *         Note: N being the number of items in the array.
 	 *         Reason:The first if statement takes constant time O(1) as each of the 
 	 *         comparisons take constant time. The variable assignment also takes constant
@@ -94,7 +110,7 @@ public class Arith {
 	 *         N times if this does not happen. The final if statement takes constant
 	 *         time. 
 	 *         Worst case -> O(1) + O(N) + O(1) = O(N)
-	 *         Shortest possible time -> O(1) + O(1) + O(1) = O(1) -> Omega(1)
+	 *         Shortest possible cost -> O(1) + O(1) + O(1) = O(1) -> Omega(1)
 	 **/
 
 	public static boolean validatePostfixOrder(String postfixLiterals[]) {
@@ -129,6 +145,23 @@ public class Arith {
 	 *
 	 * @return the integer result of evaluating the expression.
 	 * 
+	 * 		Optimality: I believe my implementation of this function is optimal as it 
+	 *		allocates only as much memory as is necessary to complete the problem. The
+	 *		stack size is limited to the maximum possible size required to compute the 
+	 *		result. There is no unnecessary duplication of resources and calculations
+	 *		are performed efficiently. 
+	 * 		Worst case running cost: Theta(N)
+	 * 		Reason: the creation of an array and assignment of an integer value take
+	 * 		constant time O(1). The for loop runs N times (N being the size of the 
+	 * 		array). The performCalc() method in the array runs in constant time O(1),
+	 * 		the Integer.parseInt() method has a running cost of O(L) where L is the 
+	 * 		length of the string passed to it. Since this number is not related to the
+	 * 		size of the input we will consider it to be a cost of O(1). This results
+	 * 		in a running cost of O(1) + ( O(N) * O(1) ) = O(N). This can be narrowed
+	 * 		down more effectively if we consider that the only variable is the length
+	 * 		of the input N. Therefore we can conclude there is a running cost of 
+	 * 		Theta(N).
+	 * 
 	 **/
 
 	public static int evaluatePrefixOrder(String prefixLiterals[]) {
@@ -149,6 +182,11 @@ public class Arith {
 
 	
 	/*
+	 *  Optimality: I believe my implementation of this function is optimal as it 
+	 * 	does not create any local variables other than the ones creates by the JVM 
+	 * 	on calling the function. These variables are all required by the function.
+	 * 	Compute time is also kept minimal through the use of immediate returns 
+	 * 	after a result is determined.
 	 * 	Worst case running time: Theta(1)
 	 *	Reason: the String.equals() function has a running time of O(N) where N 
 	 *	is the size of the string being compared. In this case however N = 1 so
@@ -178,6 +216,24 @@ public class Arith {
 	 *                        string representation of an integer.
 	 *
 	 * @return the integer result of evaluating the expression
+	 * 
+	 * 		Optimality: I believe my implementation of this function is optimal as it 
+	 *		allocates only as much memory as is necessary to complete the problem. The
+	 *		stack size is limited to the maximum possible size required to compute the 
+	 *		result. There is no unnecessary duplication of resources and calculations
+	 *		are performed efficiently. 
+	 * 		Note: Same running cost and explanation as evaluatePrefixOrder().		
+	 * 		Worst case running cost: Theta(N)
+	 * 		Reason: the creation of an array and assignment of an integer value take
+	 * 		constant time O(1). The for loop runs N times (N being the size of the 
+	 * 		array). The performCalc() method in the array runs in constant time O(1),
+	 * 		the Integer.parseInt() method has a running cost of O(L) where L is the 
+	 * 		length of the string passed to it. Since this number is not related to the
+	 * 		size of the input we will consider it to be a cost of O(1). This results
+	 * 		in a running cost of O(1) + ( O(N) * O(1) ) = O(N). This can be narrowed
+	 * 		down more effectively if we consider that the only variable is the length
+	 * 		of the input N. Therefore we can conclude there is a running cost of 
+	 * 		Theta(N).
 	 **/
 	public static int evaluatePostfixOrder(String postfixLiterals[]) {
 		int[] numStack = new int[(postfixLiterals.length / 2) + 1];
@@ -207,6 +263,19 @@ public class Arith {
 	 *                       string representation of an integer.
 	 *
 	 * @return the expression in postfix order.
+	 * 
+	 * 		Optimality: I believe my implementation of this function is optimal as it 
+	 *		allocates only as much memory as is necessary to complete the problem. The
+	 *		stack size is limited to the maximum possible size required to compute the 
+	 *		result. There is no unnecessary duplication of resources. The methods used
+	 *		are efficient and not wasteful.
+	 * 		Worst case running cost: Theta(N)
+	 * 		Reason: The array and integer assignment take constant time O(1). The
+	 * 		for loop runs N times -> O(N). Delimiting the string can take a maximum
+	 * 		time of O(N). This results in O(1) + O(N) + O(N) = O(N). However since
+	 * 		there is no scenario where the function will run in more or less than O(N)
+	 * 		time we can conclude that it has a running cost of Theta(N).
+	 * 
 	 **/
 	public static String[] convertPrefixToPostfix(String prefixLiterals[]) {
 		String[] resStack = new String[prefixLiterals.length];
@@ -220,15 +289,7 @@ public class Arith {
 				resStack[++lastDigitPointer] = itemRead;
 			}
 		}
-		String itemToDelimit = resStack[0];
-
-		String[] res = itemToDelimit.split(" ");
-		int i = 0;
-		for (int j = 0; j < res.length; j++) {
-			prefixLiterals[i++] = res[j];
-		}
-
-		return prefixLiterals;
+		return resStack[0].split(" ");
 	}
 
 	/**
@@ -240,6 +301,19 @@ public class Arith {
 	 *                       string representation of an integer.
 	 *
 	 * @return the expression in prefix order.
+	 * 
+	 * 		Optimality: I believe my implementation of this function is optimal as it 
+	 *		allocates only as much memory as is necessary to complete the problem. The
+	 *		stack size is limited to the maximum possible size required to compute the 
+	 *		result. There is no unnecessary duplication of resources. The methods used
+	 *		are efficient and not wasteful.
+	 * 		Note: same as convertPrefixToPostfix()		
+	 * 		Worst case running cost: Theta(N)
+	 * 		Reason: The array and integer assignment take constant time O(1). The
+	 * 		for loop runs N times -> O(N). Delimiting the string can take a maximum
+	 * 		time of O(N). This results in O(1) + O(N) + O(N) = O(N). However since
+	 * 		there is no scenario where the function will run in more or less than O(N)
+	 * 		time we can conclude that it has a running cost of Theta(N).
 	 **/
 	public static String[] convertPostfixToPrefix(String postfixLiterals[]) {
 		String[] resStack = new String[postfixLiterals.length];
@@ -253,15 +327,8 @@ public class Arith {
 				resStack[++lastDigitPointer] = itemRead;
 			}
 		}
-		String itemToDelimit = resStack[0];
 
-		String[] res = itemToDelimit.split(" ");
-		int i = 0;
-		for (int j = 0; j < res.length; j++) {
-			postfixLiterals[i++] = res[j];
-		}
-
-		return postfixLiterals;
+		return resStack[0].split(" ");
 	}
 
 	/**
@@ -273,6 +340,19 @@ public class Arith {
 	 *                      string representation of an integer.
 	 *
 	 * @return the expression in infix order.
+	 * 	 	
+	 * 		Optimality: I believe my implementation of this function is optimal as it 
+	 *		allocates only as much memory as is necessary to complete the problem. The
+	 *		stack size is limited to the maximum possible size required to compute the 
+	 *		result. There is no unnecessary duplication of resources. The methods used
+	 *		are efficient and not wasteful.
+	 * 		Note: same as convertPrefixToPostfix()		
+	 * 		Worst case running cost: Theta(N)
+	 * 		Reason: The array and integer assignment take constant time O(1). The
+	 * 		for loop runs N times -> O(N). Delimiting the string can take a maximum
+	 * 		time of O(N). This results in O(1) + O(N) + O(N) = O(N). However since
+	 * 		there is no scenario where the function will run in more or less than O(N)
+	 * 		time we can conclude that it has a running cost of Theta(N).
 	 **/
 	public static String[] convertPrefixToInfix(String prefixLiterals[]) {
 		String[] resStack = new String[prefixLiterals.length];
@@ -287,16 +367,7 @@ public class Arith {
 				resStack[++lastDigitPointer] = itemRead;
 			}
 		}
-		String[] outStack = new String[(prefixLiterals.length * 2) - 1];
-		String itemToDelimit = resStack[0];
-		int i = 0;
-		String[] res = itemToDelimit.split(" ");
-		for (int j = 0; j < res.length; j++) {
-			outStack[i] = res[j];
-			i++;
-		}
-
-		return outStack;
+		return resStack[0].split(" ");
 	}
 
 	/**
@@ -308,6 +379,19 @@ public class Arith {
 	 *                      string representation of an integer.
 	 *
 	 * @return the expression in infix order.
+	 * 	 	
+	 * 		Optimality: I believe my implementation of this function is optimal as it 
+	 *		allocates only as much memory as is necessary to complete the problem. The
+	 *		stack size is limited to the maximum possible size required to compute the 
+	 *		result. There is no unnecessary duplication of resources. The methods used
+	 *		are efficient and not wasteful.
+	 * 		Note: same as convertPrefixToPostfix()		
+	 * 		Worst case running cost: Theta(N)
+	 * 		Reason: The array and integer assignment take constant time O(1). The
+	 * 		for loop runs N times -> O(N). Delimiting the string can take a maximum
+	 * 		time of O(N). This results in O(1) + O(N) + O(N) = O(N). However since
+	 * 		there is no scenario where the function will run in more or less than O(N)
+	 * 		time we can conclude that it has a running cost of Theta(N).
 	 **/
 	public static String[] convertPostfixToInfix(String postfixLiterals[]) {
 		String[] resStack = new String[postfixLiterals.length];
@@ -322,16 +406,7 @@ public class Arith {
 				resStack[++lastDigitPointer] = itemRead;
 			}
 		}
-		String[] outStack = new String[(postfixLiterals.length * 2) - 1];
-		int i = 0;
-		String itemToDelimit = resStack[i];
-
-		String[] res = itemToDelimit.split(" ");
-		for (int j = 0; j < res.length; j++) {
-			outStack[i] = res[j];
-			i++;
-		}
-		return outStack;
+		return resStack[0].split(" ");
 	}
 
 }
@@ -339,15 +414,30 @@ public class Arith {
 /*
  * Data Structures Used In Code: 
  * int (primitive)
+ * Integer (object)
  * String (object)
  * Array (String and int)
  * 
  * Methods called for each Data Structure:
  * int - none, item is primitive - has no functions
  * 
+ * Integer - .parseInt() method. This method has a running cost of O(N) where N is the 
+ * 			 length of the string passed to the method. 
+ * 
  * String - .equals() method. This method runs in time O(N) where N are the number of items 
  * 			in the String being compared. I used this method exclusively with strings of 
  * 			size 1 which resulted in a running time of O(1) (also Theta(1)).
+ * 		  - .split() method. This method uses regular expressions to determine where to 
+ * 			split a string into subStrings, it then calls the .subString() method in the
+ * 			Java String class. This method copies the required range from the internal 
+ * 			char array in the String object. This operation takes constant time O(1). Since
+ * 			the subString method is called m times with m being the number of items in the 
+ * 			resulting array: the cost is O(m). However since m is a fraction of N (the size
+ * 			of the original array) it can be written as N/x with x being some positive 
+ * 			integer. This results in an actual asymptotic running time of O(N).
+ * 
+ * Array - no array methods are called. Only array accesses are used which have a cost of 
+ * 		   O(1).
  * 
  * 
  */
