@@ -11,7 +11,7 @@ import java.util.TimerTask;
 public class test {
 	public static final int MAX_LENGTH_BITS = 65536;// Max num. of bits (2 bytes -> short)
 	public static final int MAX_LENGTH_BYTES = MAX_LENGTH_BITS / 8;
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
 //		String s = "hello";
 //		System.out.println(s.length());
 //		System.out.println(s.getBytes(StandardCharsets.UTF_16).length);
@@ -72,10 +72,10 @@ public class test {
 //		byte[] contentArray = Arrays.copyOfRange(data,2 - 1,data.length -1);
 //		String content = new String(contentArray, StandardCharsets.UTF_16);
 //		System.out.println(content);
-		
-		System.out.println(Arrays.toString(getWindowLocs((byte)0,(byte)5,5,10)));
-		
-	}
+//		
+//		System.out.println(Arrays.toString(getWindowLocs((byte)0,(byte)5,5,10)));
+//		
+//	}
 	
 	private static byte[][] splitStr(String theString) {// split a string into a series of byte arrays
 		byte[] strByteArr = theString.getBytes(StandardCharsets.UTF_16);// string -> byte[]
