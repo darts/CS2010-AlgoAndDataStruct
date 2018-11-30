@@ -192,6 +192,8 @@ public class BST<Key extends Comparable<Key>, Value> {
 	 * @return a multi-line string with the pretty ascii picture of the tree.
 	 */
 	public String prettyPrintKeys() {
+		if(root == null)
+			return "-null";
 		return prettyPrint(root, "");
 	}
 
@@ -211,7 +213,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 	 * @param key the key to delete
 	 */
 	public void delete(Key key) {
-		delete(root, key);
+		root = delete(root, key);
 	}
 	
 	private Node getLargestInTree(Node theNode, Node prevNode) {

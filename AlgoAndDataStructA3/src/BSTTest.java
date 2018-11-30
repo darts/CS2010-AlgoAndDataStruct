@@ -25,7 +25,7 @@ public class BSTTest
  @Test
  public void testPrettyPrint() {
      BST<Integer, Integer> bst = new BST<Integer, Integer>();
-		assertEquals("Checking pretty printing of empty tree", "-null\n", bst.prettyPrintKeys());
+		assertEquals("Checking pretty printing of empty tree", "-null", bst.prettyPrintKeys());
       
                           //  -7
                           //   |-3
@@ -74,6 +74,12 @@ public class BSTTest
          bst.delete(1);
          assertEquals("Deleting from empty tree", "()", bst.printKeysInOrder());
          
+         bst.put(1, 1);
+         bst.delete(1);
+         System.out.println(bst.printKeysInOrder());
+         assertEquals("Deleting from a tree with 1 node.", "()", bst.printKeysInOrder());
+         
+         
          bst.put(7, 7);   //        _7_
          bst.put(8, 8);   //      /     \
          bst.put(3, 3);   //    _3_      8
@@ -108,7 +114,7 @@ public class BSTTest
 		bst.put(6, 6);
 		bst.put(8, 8);
 		bst.delete(7);
-		assertEquals("Deleting root with two children", "((()4(()5()))7(()8()))", bst.printKeysInOrder());
+		assertEquals("Deleting root with two children", "((()4(()5()))6(()8()))", bst.printKeysInOrder());
 	 }
      
      
