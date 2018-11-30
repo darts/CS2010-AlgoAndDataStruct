@@ -172,6 +172,9 @@ public class BSTTest
     	 
     	 bst.put(5,5);
     	 assertEquals("Testing get with multiple nodes.", "5", Integer.toString(bst.get(5)));
+    	 
+    	 bst.put(5, 6);
+    	 assertEquals("Testing get with multiple nodes.", "6", Integer.toString(bst.get(5)));
      }
      
      @Test
