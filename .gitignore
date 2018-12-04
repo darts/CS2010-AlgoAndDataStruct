@@ -103,3 +103,5 @@ TelecommsAssignment2/.project
 TelecommsAssignment2/src/Controller.java
 TelecommsAssignment2/src/Endpoint.java
 TelecommsAssignment2/src/ManagementController.java
+TelecommsAssignment2/src/Content.java
+TelecommsAssignment2/src/Serializer.java
