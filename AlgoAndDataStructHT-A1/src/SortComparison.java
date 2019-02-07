@@ -47,21 +47,22 @@ class SortComparison {
 	static double[] quickSort(double a[]) {
 		if (a == null || a.length < 2)
 			return a;
-		return quickSortRecursive(a, 0, a.length - 1);
+		double[] array = quickSortRecursive(a, 0, a.length - 1);
+		return array;
 	}// end quicksort
 
 	private static double[] quickSortRecursive(double a[], int start, int finish) {
-		assert (start >= 0 && finish < a.length);
-		if (finish - start >= 2) {
+//		assert (start >= 0 && finish < a.length);
+		if (finish - start >= 2 && start >= 0 && finish < a.length) {
 			int i = start + 1;
 			int j = finish;
 
 			while (i < j) {
-				while (a[i] > a[start])
+				while (a[i] < a[start] && i < a.length)
 					i++;
-				while (a[j] < a[start] && i < j)
+				while (a[j] > a[start] && j > 0)
 					j--;
-				if (a[i] > a[start] && a[j] < a[start] && i < j) {
+				if (a[i] > a[j] && i < j) {
 					double tmp = a[i];
 					a[i] = a[j];
 					a[j] = tmp;
@@ -72,9 +73,9 @@ class SortComparison {
 			a[j] = tmp;
 
 			if (start != j)
-				a = quickSortRecursive(a, start, j);
+				a = quickSortRecursive(a, start, j-1);
 			if (finish != j)
-				a = quickSortRecursive(a, j, finish);
+				a = quickSortRecursive(a, j+1, finish);
 		} else {
 			if (a[start] > a[finish]) {
 				double tmp = a[start];
