@@ -2,21 +2,25 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 //-------------------------------------------------------------------------
 /**
  *  Test class for SortComparison.java
  *
- *  @author
+ *  @author Senán d'Art
  *  @version HT 2019
  */
 @RunWith(JUnit4.class)
 public class SortComparisonTest
 {
+	private static double[] arr10 = {2377.88,2910.66,8458.14,1522.08,5855.37,1934.75,8106.23,1735.31,4849.83,1518.63};
+	private static double[] arr10sorted = {1518.63,1522.08,1735.31,1934.75,2377.88,2910.66,4849.83,5855.37,8106.23,8458.14};
+
+	
     //~ Constructor ........................................................
     @Test
     public void testConstructor()
@@ -42,33 +46,12 @@ public class SortComparisonTest
     
     @Test
     public void test10() {
-    	double[] a = new double[10];
-    	double[] expectedResult = new double[10];
-    	try (BufferedReader br = new BufferedReader(new FileReader("numbers10.txt"))) {
-    	    String line;
-    	    int i = 0;
-    	    while ((line = br.readLine()) != null) {
-    	    	a[i++] = Double.parseDouble(line); 
-    	    }
-    	}catch(Exception e) {
-    		System.out.println("R.I.P - nice try at reading the file");
-    		e.printStackTrace();
-    	}
-  
-    	try (BufferedReader br = new BufferedReader(new FileReader("numbersSorted10.txt"))) {
-    	    String line;
-    	    int i = 0;
-    	    while ((line = br.readLine()) != null) {
-    	    	expectedResult[i++] = Double.parseDouble(line); 
-    	    }
-    	}catch(Exception e) {
-    		System.out.println("R.I.P - nice try at reading the file");
-    		e.printStackTrace();
-    	}
-    	
-    	assertEquals("quickSort failed with 10 object array", expectedResult, SortComparison.quickSort(a));
 
-    	assertEquals("insertionSort failed with 10 object array", expectedResult, SortComparison.insertionSort(a));
+    	boolean arrayCorrectlySorted = Arrays.equals(arr10sorted, SortComparison.quickSort(arr10));
+    	assertEquals("quickSort failed with 10 object array", true, arrayCorrectlySorted);
+
+    	arrayCorrectlySorted = Arrays.equals(arr10sorted, SortComparison.insertionSort(arr10));
+    	assertEquals("insertionSort failed with 10 object array", true, arrayCorrectlySorted);
     }
     
 

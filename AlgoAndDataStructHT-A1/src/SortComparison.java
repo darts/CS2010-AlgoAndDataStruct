@@ -21,7 +21,13 @@ class SortComparison {
 	static double[] insertionSort(double a[]) {
 		if (a == null || a.length < 2)
 			return a;
-		for (int i = 1; i < a.length; i++) {
+		return insertionSortSpec(a, 0, a.length);
+	}// end insertionsort
+	
+	private static double[] insertionSortSpec(double a[], int start, int finish) {
+		if (a == null || a.length < 2)
+			return a;
+		for (int i = start + 1; i < finish; i++) {
 			boolean minReached = false;
 			for (int j = i; j >= 1 && !minReached; j--) {
 				if (a[j] < a[j - 1]) {
@@ -34,7 +40,7 @@ class SortComparison {
 			}
 		}
 		return a;
-	}// end insertionsort
+	}
 
 	/**
 	 * Sorts an array of doubles using Quick Sort. This method is static, thus it
