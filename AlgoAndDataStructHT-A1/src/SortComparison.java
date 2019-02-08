@@ -142,6 +142,22 @@ class SortComparison {
 	 */
 	
 	/**
+	 * Sorts an array of doubles using recursive implementation of Merge Sort. This
+	 * method is static, thus it can be called as SortComparison.sort(a)
+	 *
+	 * @param a: An unsorted array of doubles.
+	 * @return after the method returns, the array must be in ascending sorted
+	 *         order.
+	 */
+	static double[] mergeSortRecursive(double a[]) {
+		return null;
+		// todo: implement the sort
+
+	}
+
+	//***********************end mergeSortRecursive************************
+	
+	/**
 	 * Sorts an array of doubles using iterative implementation of Merge Sort. This
 	 * method is static, thus it can be called as SortComparison.sort(a)
 	 *
@@ -157,22 +173,6 @@ class SortComparison {
 	}
 	
 	//*********************end mergesortIterative*************************
-
-	/**
-	 * Sorts an array of doubles using recursive implementation of Merge Sort. This
-	 * method is static, thus it can be called as SortComparison.sort(a)
-	 *
-	 * @param a: An unsorted array of doubles.
-	 * @return after the method returns, the array must be in ascending sorted
-	 *         order.
-	 */
-	static double[] mergeSortRecursive(double a[]) {
-		return null;
-		// todo: implement the sort
-
-	}
-
-	//***********************end mergeSortRecursive************************
 
 	/**
 	 * Sorts an array of doubles using Selection Sort. This method is static, thus
