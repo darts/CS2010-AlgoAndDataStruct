@@ -28,8 +28,6 @@ class SortComparison {
 	}// end insertionsort
 
 	private static double[] insertionSortSpec(double a[], int start, int finish) {
-		if (a == null || a.length < 2)
-			return a;
 		for (int i = start + 1; i < finish; i++) {
 			boolean minReached = false;
 			for (int j = i; j >= 1 && !minReached; j--) {
@@ -67,12 +65,12 @@ class SortComparison {
 			int i = start + 1;
 			int j = finish;
 
-			while (i < j) {
-				while (a[i] < a[start] && i < a.length) // find number higher than pivot
+			while (i <= j) {
+				while (i < a.length && a[i] < a[start]) // find number higher than pivot
 					i++;
-				while (a[j] > a[start] && j > 0) // find number higher than pivot
+				while (j > 0 && a[j] > a[start]) // find number higher than pivot
 					j--;
-				if (a[i] > a[j] && i < j) { // swap
+				if (i < j && a[i] > a[j]) { // swap
 					double tmp = a[i];
 					a[i] = a[j];
 					a[j] = tmp;
@@ -86,7 +84,7 @@ class SortComparison {
 				a = quickSortRecursive(a, start, j - 1);
 			if (finish != j) // call recursively on right sub-array
 				a = quickSortRecursive(a, j + 1, finish);
-		} 
+		}
 //		else{ // only 2 items
 //			if (a[start] > a[finish]) { // swap if required
 //				double tmp = a[start];
@@ -98,13 +96,13 @@ class SortComparison {
 		return a;
 	}
 
-	// test with shuffling array
-	static double[] quickSortWithShuffle(double a[]) {
-		if (a == null || a.length < 2) // check for invalid/already sorted arrays
-			return a;
-		a = shuffleArr(a);
-		return quickSortRecursive(a, 0, a.length - 1);
-	}
+	// test with shuffling array ******************************************
+//	static double[] quickSortWithShuffle(double a[]) {
+//		if (a == null || a.length < 2) // check for invalid/already sorted arrays
+//			return a;
+//		a = shuffleArr(a);
+//		return quickSortRecursive(a, 0, a.length - 1);
+//	}
 
 //	//test with shuffling array and insertionSort for arrays < 10
 //		static double[] quickSortWithShuffle(double a[]) {
@@ -120,16 +118,16 @@ class SortComparison {
 	 * Function has running cost of N. Where N is the size of the array. I worked
 	 * through it on paper and understand its function
 	 */
-	private static double[] shuffleArr(double a[]) {
-		Random rnd = ThreadLocalRandom.current();
-		for (int i = a.length - 1; i > 0; i--) {
-			int index = rnd.nextInt(i + 1); // pick a number 0<=index<=i (rnd.nextInt upper bound is exclusive)
-			double tmp = a[index];
-			a[index] = a[i];
-			a[i] = tmp;
-		}
-		return a;
-	}
+//	private static double[] shuffleArr(double a[]) {
+//		Random rnd = ThreadLocalRandom.current();
+//		for (int i = a.length - 1; i > 0; i--) {
+//			int index = rnd.nextInt(i + 1); // pick a number 0<=index<=i (rnd.nextInt upper bound is exclusive)
+//			double tmp = a[index];
+//			a[index] = a[i];
+//			a[i] = tmp;
+//		}
+//		return a;
+//	}
 
 	// *******************end of quickSort****************
 
@@ -141,7 +139,7 @@ class SortComparison {
 	 * @return array sorted in ascending order
 	 *
 	 */
-	
+
 	/**
 	 * Sorts an array of doubles using recursive implementation of Merge Sort. This
 	 * method is static, thus it can be called as SortComparison.sort(a)
@@ -151,36 +149,39 @@ class SortComparison {
 	 *         order.
 	 */
 	static double[] mergeSortRecursive(double[] a) {
-		if(a == null || a.length < 2)
+		if (a == null || a.length < 2)
 			return a;
-		
-		return mSortR(a, 0, a.length-1);
+		return mSortR(a, a, 0, a.length - 1);
 	}
-	
-	private static double[] mSortR(double[] a, int lo, int hi) {
-		if(lo == hi)
-			return a;
-		int mid = lo + (hi-lo)/2;
-		double[] aLo = mSortR(a, lo, mid);
-		double[] aHi = mSortR(a, mid+1, hi);
-		return mergeR(aLo, aHi, lo, mid, hi);
-	}
-	
-	private static double[] mergeR(double[] aLo, double[] aHi, int lo, int mid, int hi) {
-		double[] a = aHi;	//for better performance on almost sorted arrays
-		int i = lo, j = mid+1;
-		for(int k = lo; k < hi && i <= mid; k++) {
-			if(aLo[i] <= aHi[j] || j > hi)
-				a[k] = aLo[i++];
-			else
-				a[k] = aHi[j++];
-		}
-		return a;
-	}
-	
 
-	//***********************end mergeSortRecursive************************
-	
+	private static double[] mSortR(double[] a, double[] ori, int lo, int hi) {
+		if (lo == hi)
+			return a;
+		int mid = lo + (hi - lo) / 2;
+		a = mSortR(a, ori, lo, mid);
+		a = mSortR(a, ori, mid + 1, hi);
+		return mergeR(a, lo, mid, hi);
+	}
+
+	private static double[] mergeR(double[] a, int lo, int mid, int hi) {
+		double[] ori = new double[a.length];
+		System.arraycopy(a, 0, ori, 0, a.length);
+		int i = lo, j = mid + 1;
+		for (int k = lo; k <= hi; k++) {
+			if (i > mid)
+				ori[k] = a[j++];
+			else if (j > hi)
+				ori[k] = a[i++];
+			else if (a[i] <= a[j])
+				ori[k] = a[i++];
+			else
+				ori[k] = a[j++];
+		}
+		return ori;
+	}
+
+	// ***********************end mergeSortRecursive************************
+
 	/**
 	 * Sorts an array of doubles using iterative implementation of Merge Sort. This
 	 * method is static, thus it can be called as SortComparison.sort(a)
@@ -191,16 +192,22 @@ class SortComparison {
 	 */
 
 	static double[] mergeSortIterative(double a[]) {
-		if(a == null || a.length < 2)
+		if (a == null || a.length < 2)
 			return a;
 		return mSortI(a);
 	}
-	
+
 	private static double[] mSortI(double a[]) {
-		
+		int arrLen = a.length;
+		for (int i = 1; i < arrLen; i += i) {
+			for (int j = 0; j < arrLen - i; j += i + i) {
+				a = mergeR(a, j, j + i - 1, Math.min(j + i + i - 1, arrLen - 1));
+			}
+		}
+		return a;
 	}
-	
-	//*********************end mergesortIterative*************************
+
+	// *********************end mergesortIterative*************************
 
 	/**
 	 * Sorts an array of doubles using Selection Sort. This method is static, thus
@@ -226,8 +233,8 @@ class SortComparison {
 		}
 		return a;
 	}
-	
-	//*****************************end selectionSort**********************
+
+	// *****************************end selectionSort**********************
 
 	public static void main(String[] args) {
 
