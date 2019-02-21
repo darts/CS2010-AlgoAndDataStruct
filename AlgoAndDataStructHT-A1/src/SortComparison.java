@@ -150,40 +150,34 @@ class SortComparison {
 	 * @return after the method returns, the array must be in ascending sorted
 	 *         order.
 	 */
-	static double[] mergeSortRecursive(double a[]) {
+	static double[] mergeSortRecursive(double[] a) {
 		if(a == null || a.length < 2)
 			return a;
-		double[] aux = new double[a.length];
-		mergeSort(a, aux, 0, a.length-1);
+		
+		return mSortR(a, 0, a.length-1);
+	}
+	
+	private static double[] mSortR(double[] a, int lo, int hi) {
+		if(lo == hi)
+			return a;
+		int mid = lo + (hi-lo)/2;
+		double[] aLo = mSortR(a, lo, mid);
+		double[] aHi = mSortR(a, mid+1, hi);
+		return mergeR(aLo, aHi, lo, mid, hi);
+	}
+	
+	private static double[] mergeR(double[] aLo, double[] aHi, int lo, int mid, int hi) {
+		double[] a = aHi;	//for better performance on almost sorted arrays
+		int i = lo, j = mid+1;
+		for(int k = lo; k < hi && i <= mid; k++) {
+			if(aLo[i] <= aHi[j] || j > hi)
+				a[k] = aLo[i++];
+			else
+				a[k] = aHi[j++];
+		}
 		return a;
 	}
 	
-	private static void mergeSort(double a[], double aux[], int lo, int hi) {
-		if(hi <= lo) 
-			return;
-		int mid = lo + (hi-lo)/2;
-		mergeSort(a, aux, lo, mid);
-		mergeSort(a, aux, mid, hi);
-		merge(a, aux, lo, mid, hi);
-	}
-	
-	private static void merge(double a[], double aux[], int lo, int mid, int hi) {
-		for(int k = lo; k <= hi; k++) 
-			aux[k] = a[k];
-				
-		int i = lo, j = mid+1;
-		for(int k = lo; k <= hi; k++) {
-			if(i > mid)
-				a[k] = aux[j++];
-			else if (j > hi)
-				a[k] = aux[i++];
-			else if (aux[j] < aux[i])
-				a[k] = aux[j++];
-			else 
-				a[k] = aux[i++];
-				
-		}
-	}
 
 	//***********************end mergeSortRecursive************************
 	
@@ -197,9 +191,13 @@ class SortComparison {
 	 */
 
 	static double[] mergeSortIterative(double a[]) {
-
-		// todo: implement the sort
-		return null;
+		if(a == null || a.length < 2)
+			return a;
+		return mSortI(a);
+	}
+	
+	private static double[] mSortI(double a[]) {
+		
 	}
 	
 	//*********************end mergesortIterative*************************
