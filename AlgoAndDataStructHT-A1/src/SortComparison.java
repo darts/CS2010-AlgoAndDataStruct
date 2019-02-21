@@ -63,7 +63,7 @@ class SortComparison {
 	}
 
 	private static double[] quickSortRecursive(double a[], int start, int finish) {
-		if (finish - start >= 2 && start >= 0 && finish < a.length) {// check for valid arrays again
+		if (finish - start >= 1) {// check for valid arrays again
 			int i = start + 1;
 			int j = finish;
 
@@ -86,13 +86,14 @@ class SortComparison {
 				a = quickSortRecursive(a, start, j - 1);
 			if (finish != j) // call recursively on right sub-array
 				a = quickSortRecursive(a, j + 1, finish);
-		} else if (finish - start >= 2) { // only 2 items
-			if (a[start] > a[finish]) { // swap if required
-				double tmp = a[start];
-				a[start] = a[finish];
-				a[finish] = tmp;
-			}
-		}
+		} 
+//		else{ // only 2 items
+//			if (a[start] > a[finish]) { // swap if required
+//				double tmp = a[start];
+//				a[start] = a[finish];
+//				a[finish] = tmp;
+//			}
+//		}
 
 		return a;
 	}
@@ -150,9 +151,38 @@ class SortComparison {
 	 *         order.
 	 */
 	static double[] mergeSortRecursive(double a[]) {
-		return null;
-		// todo: implement the sort
-
+		if(a == null || a.length < 2)
+			return a;
+		double[] aux = new double[a.length];
+		mergeSort(a, aux, 0, a.length-1);
+		return a;
+	}
+	
+	private static void mergeSort(double a[], double aux[], int lo, int hi) {
+		if(hi <= lo) 
+			return;
+		int mid = lo + (hi-lo)/2;
+		mergeSort(a, aux, lo, mid);
+		mergeSort(a, aux, mid, hi);
+		merge(a, aux, lo, mid, hi);
+	}
+	
+	private static void merge(double a[], double aux[], int lo, int mid, int hi) {
+		for(int k = lo; k <= hi; k++) 
+			aux[k] = a[k];
+				
+		int i = lo, j = mid+1;
+		for(int k = lo; k <= hi; k++) {
+			if(i > mid)
+				a[k] = aux[j++];
+			else if (j > hi)
+				a[k] = aux[i++];
+			else if (aux[j] < aux[i])
+				a[k] = aux[j++];
+			else 
+				a[k] = aux[i++];
+				
+		}
 	}
 
 	//***********************end mergeSortRecursive************************

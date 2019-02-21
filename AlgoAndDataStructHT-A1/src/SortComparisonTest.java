@@ -42,16 +42,23 @@ public class SortComparisonTest
     	assertEquals("quickSort failed with null array", expectedResult, SortComparison.quickSort(a));
 
     	assertEquals("insertionSort failed with null array", expectedResult, SortComparison.insertionSort(a));
+    	
+    	assertEquals("mergeSortRecursive failed with null array", expectedResult, SortComparison.mergeSortRecursive(a));
+
     }
     
     @Test
     public void test10() {
-
+    	
     	boolean arrayCorrectlySorted = Arrays.equals(arr10sorted, SortComparison.quickSort(arr10));
     	assertEquals("quickSort failed with 10 object array", true, arrayCorrectlySorted);
-
+    	SortComparison.mergeSortRecursive(arr10);
     	arrayCorrectlySorted = Arrays.equals(arr10sorted, SortComparison.insertionSort(arr10));
     	assertEquals("insertionSort failed with 10 object array", true, arrayCorrectlySorted);
+    	
+    	arrayCorrectlySorted = Arrays.equals(arr10sorted, SortComparison.mergeSortRecursive(arr10));
+    	assertEquals("mergeSortRecursive failed with 10 object array", true, arrayCorrectlySorted);
+
     }
     
 
