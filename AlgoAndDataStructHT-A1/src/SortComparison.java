@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -56,78 +59,62 @@ class SortComparison {
 	static double[] quickSort(double a[]) {
 		if (a == null || a.length < 2) // check for invalid/already sorted arrays
 			return a;
-		double[] array = quickSortRecursive(a, 0, a.length - 1);
-		return array;
+		return quickSortRecursive(a, 0, a.length - 1);
 	}
 
 	private static double[] quickSortRecursive(double a[], int start, int finish) {
-		if (finish - start >= 1) {// check for valid arrays again
-			int i = start + 1;
-			int j = finish;
+		int i = start + 1;
+		int j = finish;
 
-			while (i <= j) {
-				while (i < a.length && a[i] < a[start]) // find number higher than pivot
-					i++;
-				while (j > 0 && a[j] > a[start]) // find number higher than pivot
-					j--;
-				if (i < j && a[i] > a[j]) { // swap
-					double tmp = a[i];
-					a[i] = a[j];
-					a[j] = tmp;
-				}
+		while (i <= j) {
+			while (i < a.length && a[i] < a[start]) // find number higher than pivot
+				i++;
+			while (j > 0 && a[j] > a[start]) // find number higher than pivot
+				j--;
+			if (i < j && a[i] > a[j]) { // swap
+				double tmp = a[i];
+				a[i] = a[j];
+				a[j] = tmp;
 			}
-			double tmp = a[start]; // move pivot to center
-			a[start] = a[j];
-			a[j] = tmp;
-
-			if (start != j) // call recursively on left sub-array
-				a = quickSortRecursive(a, start, j - 1);
-			if (finish != j) // call recursively on right sub-array
-				a = quickSortRecursive(a, j + 1, finish);
 		}
-//		else{ // only 2 items
-//			if (a[start] > a[finish]) { // swap if required
-//				double tmp = a[start];
-//				a[start] = a[finish];
-//				a[finish] = tmp;
-//			}
-//		}
+		double tmp = a[start]; // move pivot to center
+		a[start] = a[j];
+		a[j] = tmp;
+		if (start < j - 1) { // call recursively on left sub-array
+			a = quickSortRecursive(a, start, j - 1);
+		}
 
+		if (finish > j + 1) { // call recursively on right sub-array
+			a = quickSortRecursive(a, j + 1, finish);
+		}
 		return a;
 	}
 
-	// test with shuffling array ******************************************
-//	static double[] quickSortWithShuffle(double a[]) {
-//		if (a == null || a.length < 2) // check for invalid/already sorted arrays
-//			return a;
-//		a = shuffleArr(a);
-//		return quickSortRecursive(a, 0, a.length - 1);
-//	}
-
-//	//test with shuffling array and insertionSort for arrays < 10
-//		static double[] quickSortWithShuffle(double a[]) {
-//			if (a == null || a.length < 2) // check for invalid/already sorted arrays
-//				return a;
-//			a = shuffleArr(a);
-//			return quickSortRecursive(a, 0, a.length - 1);
-//		}
+	// test with shuffling array
+	static double[] quickSortWithShuffle(double a[]) {
+		if (a == null || a.length < 2) // check for invalid/already sorted arrays
+			return a;
+		a = shuffleArr(a);
+		return quickSortRecursive(a, 0, a.length - 1);
+	}
 
 	/*
 	 * This is an algorithm I found online on StackOverFlow:
 	 * https://stackoverflow.com/questions/1519736/random-shuffling-of-an-array
-	 * Function has running cost of N. Where N is the size of the array. I worked
-	 * through it on paper and understand its function
+	 * Function has running cost of N. Where N is the size of the array.
 	 */
-//	private static double[] shuffleArr(double a[]) {
-//		Random rnd = ThreadLocalRandom.current();
-//		for (int i = a.length - 1; i > 0; i--) {
-//			int index = rnd.nextInt(i + 1); // pick a number 0<=index<=i (rnd.nextInt upper bound is exclusive)
-//			double tmp = a[index];
-//			a[index] = a[i];
-//			a[i] = tmp;
-//		}
-//		return a;
-//	}
+	private static double[] shuffleArr(double a[]) {
+		double tmp = 0;
+		int index = 0;
+		Random rnd = ThreadLocalRandom.current();
+		for (int i = a.length - 1; i > 0; i--) {
+			index = rnd.nextInt(i + 1); // pick a number 0<=index<=i (rnd.nextInt upper bound is exclusive)
+			tmp = a[index];
+			a[index] = a[i];
+			a[i] = tmp;
+		}
+		return a;
+	}
 
 	// *******************end of quickSort****************
 
@@ -151,33 +138,36 @@ class SortComparison {
 	static double[] mergeSortRecursive(double[] a) {
 		if (a == null || a.length < 2)
 			return a;
-		return mSortR(a, a, 0, a.length - 1);
+		double[] aux = new double[a.length];
+		mSortR(a, aux, 0, a.length - 1);
+		return a;
 	}
 
-	private static double[] mSortR(double[] a, double[] ori, int lo, int hi) {
-		if (lo == hi)
-			return a;
+	private static void mSortR(double[] a, double[] aux, int lo, int hi) {
+		if (lo >= hi)
+			return;
 		int mid = lo + (hi - lo) / 2;
-		a = mSortR(a, ori, lo, mid);
-		a = mSortR(a, ori, mid + 1, hi);
-		return mergeR(a, lo, mid, hi);
+		mSortR(a, aux, lo, mid);
+		mSortR(a, aux, mid + 1, hi);
+		mergeR(a, aux, lo, mid, hi);
 	}
 
-	private static double[] mergeR(double[] a, int lo, int mid, int hi) {
-		double[] ori = new double[a.length];
-		System.arraycopy(a, 0, ori, 0, a.length);
+	private static void mergeR(double[] a, double[] aux, int lo, int mid, int hi) {
+//		System.arraycopy(a, lo, aux, lo, hi-lo);
+		for (int i = lo; i <= hi; i++)
+			aux[i] = a[i];
+
 		int i = lo, j = mid + 1;
 		for (int k = lo; k <= hi; k++) {
 			if (i > mid)
-				ori[k] = a[j++];
+				a[k] = aux[j++];
 			else if (j > hi)
-				ori[k] = a[i++];
-			else if (a[i] <= a[j])
-				ori[k] = a[i++];
+				a[k] = aux[i++];
+			else if (aux[i] > aux[j])
+				a[k] = aux[j++];
 			else
-				ori[k] = a[j++];
+				a[k] = aux[i++];
 		}
-		return ori;
 	}
 
 	// ***********************end mergeSortRecursive************************
@@ -199,9 +189,10 @@ class SortComparison {
 
 	private static double[] mSortI(double a[]) {
 		int arrLen = a.length;
+		double[] aux = new double[arrLen];
 		for (int i = 1; i < arrLen; i += i) {
 			for (int j = 0; j < arrLen - i; j += i + i) {
-				a = mergeR(a, j, j + i - 1, Math.min(j + i + i - 1, arrLen - 1));
+				mergeR(a, aux, j, j + i - 1, Math.min(j + i + i - 1, arrLen - 1));
 			}
 		}
 		return a;
@@ -237,8 +228,51 @@ class SortComparison {
 	// *****************************end selectionSort**********************
 
 	public static void main(String[] args) {
+		ThreadLocalRandom.current(); // the first call to ThreadLocalRandom takes a very long time (~0.4
+										// milliseconds)
+		int numOfRuns = 3; // how many times to run
+		double averageTime = 0;
+		for (int k = 0; k < numOfRuns; k++) {
+			// READ ELEMENTS FROM FILE *****************************************
+			ArrayList<Double> aList = new ArrayList<Double>();
+			try {
+				// change path as required
+				String filePath = "numbers10.txt";
+				BufferedReader bReader = new BufferedReader(new FileReader(filePath));
+				String number;
+				while ((number = bReader.readLine()) != null) {
+					aList.add(Double.parseDouble(number));
+				}
+				bReader.close();
+			} catch (Exception e) {
+				e.printStackTrace(System.out);
+			}
+			int i = 0;
+			double[] arr = new double[aList.size()];
+			for (Double dubdub : aList)
+				arr[i++] = dubdub;
+			// FINISH READING FROM FILE ****************************************
 
-		// todo: do experiments as per assignment instructions
+			double startTime = System.nanoTime();
+			// Uncomment the one you want to test:
+//			insertionSort(arr);
+//			quickSort(arr);
+//			quickSortWithShuffle(arr);
+//			mergeSortRecursive(arr);
+//			mergeSortIterative(arr);
+			selectionSort(arr);
+			double finTime = System.nanoTime();
+			averageTime += ((finTime - startTime) / 1000000);
+		}
+		System.out.println(averageTime / numOfRuns);
+
+		// If you want to print the resulting array
+//		printArr(arr);
+	}
+
+	public static void printArr(double[] arr) {
+		for (int i = 0; i < arr.length; i++)
+			System.out.println(arr[i]);
 	}
 
 }// end class
