@@ -1,6 +1,6 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
+//import java.io.BufferedReader;
+//import java.io.FileReader;
+//import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -159,10 +159,8 @@ class SortComparison {
 	}
 
 	private static void mergeR(double[] a, double[] aux, int lo, int mid, int hi) {
-//		System.arraycopy(a, lo, aux, lo, hi-lo);
-		for (int i = lo; i <= hi; i++)
-			aux[i] = a[i];
-
+		System.arraycopy(a, lo, aux, lo, (hi-lo) + 1);
+		
 		int i = lo, j = mid + 1;
 		for (int k = lo; k <= hi; k++) {
 			if (i > mid)
@@ -235,6 +233,7 @@ class SortComparison {
 
 	public static void main(String[] args) {
 		//Uncomment this whole section to test timing
+		//Also uncomment lines 1 through 3
 		
 		//TEST START ******************************************************
 		
