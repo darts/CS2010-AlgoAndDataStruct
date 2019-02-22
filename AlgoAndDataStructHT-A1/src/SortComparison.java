@@ -79,9 +79,8 @@ class SortComparison {
 			while (a[++i] < a[start]) // find number higher than pivot
 				if (i == finish)
 					break;
-			while (a[--j] > a[start]) // find number higher than pivot
-				if (j == start)
-					break;
+			while (a[--j] > a[start]) {} // find number higher than pivot
+				
 			if (j <= i)
 				break;
 			double tmp = a[i];
