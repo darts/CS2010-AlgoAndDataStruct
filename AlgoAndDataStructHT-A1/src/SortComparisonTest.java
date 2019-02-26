@@ -1,5 +1,11 @@
+//import java.io.BufferedReader;
+//import java.io.FileReader;
+//import java.util.concurrent.ThreadLocalRandom;
+//import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
+
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -219,7 +225,98 @@ public class SortComparisonTest {
 	}
 	
 	public static void main(String[] args) {
-		// TODO: implement this method
+		
+		//Uncomment this whole section to test timing
+		//Also uncomment lines 1 through 4
+		//TEST START using ArrayLists ******************************************************
+		
+//		ThreadLocalRandom.current(); // the first call to ThreadLocalRandom takes a very long time (~0.4
+//										// milliseconds)
+//		int numOfRuns = 3; // how many times to run
+//		double averageTime = 0;
+//		for (int k = 0; k < numOfRuns; k++) {
+//			// READ ELEMENTS FROM FILE ************************************
+//			ArrayList<Double> aList = new ArrayList<Double>();
+//			try {
+//				// change path as required
+//				String filePath = "numbers100.txt";
+//				BufferedReader bReader = new BufferedReader(new FileReader(filePath));
+//				String number;
+//				while ((number = bReader.readLine()) != null) {
+//					aList.add(Double.parseDouble(number));
+//				}
+//				bReader.close();
+//			} catch (Exception e) {
+//				e.printStackTrace(System.out);
+//			}
+//			int i = 0;
+//			double[] arr = new double[aList.size()];
+//			for (Double dubdub : aList)
+//				arr[i++] = dubdub;
+//			// FINISH READING FROM FILE ***********************************
+//
+//			double startTime = System.nanoTime();
+//			// Uncomment the one you want to test:
+//			insertionSort(arr);
+////			SortComparison.quickSort(arr);
+////			SortComparison.quickSortWithShuffle(arr);
+////			SortComparison.mergeSortRecursive(arr);
+////			SortComparison.mergeSortIterative(arr);
+////			SortComparison.selectionSort(arr);
+//			double finTime = System.nanoTime();
+//			averageTime += ((finTime - startTime) / 1000000);
+//		}
+//		System.out.println(averageTime / numOfRuns);
+		
+		
+		//TEST END using ArrayLists *********************************************************
+		
+		
+		
+		
+		
+		
+		//Uncomment this whole section to test timing
+		//Also uncomment lines 1 through 3
+		//TEST START w/o using ArrayLists ******************************************************
+				
+//			ThreadLocalRandom.current(); // the first call to ThreadLocalRandom takes a very long time (~0.4
+//											// milliseconds)
+//			int numOfRuns = 3; // how many times to run
+//			double averageTime = 0;
+//			int numOfItems = 100;
+//			double[] arr = new double[numOfItems];
+//			
+//			for (int k = 0; k < numOfRuns; k++) {
+//				// READ ELEMENTS FROM FILE ************************************
+//				try {
+//					// change path as required
+//					String filePath = "numbers100.txt";
+//					BufferedReader bReader = new BufferedReader(new FileReader(filePath));
+//					String number;
+//					while ((number = bReader.readLine()) != null) {
+//						arr[k] = Double.parseDouble(number);
+//					}
+//					bReader.close();
+//				} catch (Exception e) {
+//					e.printStackTrace(System.out);
+//				}
+//				// FINISH READING FROM FILE ***********************************
+//
+//				double startTime = System.nanoTime();
+//				// Uncomment the one you want to test:
+////			SortComparison.insertionSort(arr);
+////			SortComparison.quickSort(arr);
+////			SortComparison.quickSortWithShuffle(arr);
+////			SortComparison.mergeSortRecursive(arr);
+////			SortComparison.mergeSortIterative(arr);
+////			SortComparison.selectionSort(arr);
+//			double finTime = System.nanoTime();
+//			averageTime += ((finTime - startTime) / 1000000);
+//		}
+//		System.out.println(averageTime / numOfRuns);
+				
+		//TEST END w/o using ArrayLists *********************************************************
 	}
 
 }
