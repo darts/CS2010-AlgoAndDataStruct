@@ -19,22 +19,30 @@ import java.io.FileReader;
 
 public class CompetitionFloydWarshall {
 
+	public static void main(String[] args) {
+		CompetitionFloydWarshall comp = new CompetitionFloydWarshall("tinyEWD.txt", 50, 50, 50);
+		comp.timeRequiredforCompetition();
+		comp.printSolution();
+	}
+
 	/**
 	 * @param filename: A filename containing the details of the city road network
 	 * @param sA,       sB, sC: speeds for 3 contestants
 	 */
+	private static final double INFINITY = Integer.MAX_VALUE / 3;
+
 	String filename;
 	int sA, sB, sC;
 
 	int numOfIntersections, numOfStreets;
-	double gridArr[][];
+	double gridArr[][]; // road[from][to]
 
 	CompetitionFloydWarshall(String filename, int sA, int sB, int sC) {
 		this.filename = filename;
 		this.sA = sA;
 		this.sB = sB;
 		this.sC = sC;
-
+		this.readFromFile();
 	}
 
 	private void readFromFile() {
@@ -43,16 +51,17 @@ public class CompetitionFloydWarshall {
 			numOfIntersections = Integer.parseInt(bReader.readLine());
 			numOfStreets = Integer.parseInt(bReader.readLine());
 
-			gridArr = new double[numOfIntersections][numOfIntersections]; //create array
-			//init array values to infinite except for a 
-			for(int i = 0; i < numOfIntersections; i++) 
-				for(int j = 0; j < numOfIntersections; j++) 
-					gridArr[i][j] = (i == j) ? 0 : Integer.MAX_VALUE;
-			
+			gridArr = new double[numOfIntersections][numOfIntersections]; // create array
+			// init array values to infinite except for a
+			for (int i = 0; i < numOfIntersections; i++)
+				for (int j = 0; j < numOfIntersections; j++)
+					gridArr[i][j] = INFINITY;
+
+			// read from file and write to array
 			String line;
 			while ((line = bReader.readLine()) != null) {
 				String[] lVals = line.split(" ");
-//				gridArr[]
+				gridArr[Integer.parseInt(lVals[0])][Integer.parseInt(lVals[1])] = Double.parseDouble(lVals[2]);
 			}
 			bReader.close();
 		} catch (Exception e) {
@@ -65,9 +74,31 @@ public class CompetitionFloydWarshall {
 	 *         meet
 	 */
 	public int timeRequiredforCompetition() {
+		if ((sA > 100 && sA < 50) || (sB > 100 && sB < 50) || (sC > 100 && sC < 50))
+			return -1;
 
+		// run Floyd Warshall
+		for (int k = 0; k < numOfIntersections; k++)
+			for (int i = 0; i < numOfIntersections; i++)
+				for (int j = 0; j < numOfIntersections; j++)
+					if (gridArr[i][k] + gridArr[k][j] < gridArr[i][j])
+						gridArr[i][j] = gridArr[i][k] + gridArr[k][j];
+
+		
 		// TO DO
 		return -1;
+	}
+
+	void printSolution() {
+		for (int i = 0; i < numOfIntersections; ++i) {
+			for (int j = 0; j < numOfIntersections; ++j) {
+				if (gridArr[i][j] == INFINITY)
+					System.out.print("INF ");
+				else
+					System.out.print(gridArr[i][j] + "   ");
+			}
+			System.out.println();
+		}
 	}
 
 }
