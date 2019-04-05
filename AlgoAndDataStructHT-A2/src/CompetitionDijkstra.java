@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 /*
  * A Contest to Meet (ACM) is a reality TV contest that sets three contestants at three random
  * city intersections. In order to win, the three contestants need all to meet at any intersection
@@ -16,24 +19,104 @@
  */
 
 public class CompetitionDijkstra {
+	private static final double INFINITY = Integer.MAX_VALUE / 3;
 
-    /**
-     * @param filename: A filename containing the details of the city road network
-     * @param sA, sB, sC: speeds for 3 contestants
-    */
-    CompetitionDijkstra (String filename, int sA, int sB, int sC){
+	String filename;
+	int sA, sB, sC;
 
-       //TODO
-    }
+	int numOfIntersections, numOfStreets;
+	int slowest;
+	double[][] roadConnections;
 
+	/**
+	 * @param filename: A filename containing the details of the city road network
+	 * @param sA,       sB, sC: speeds for 3 contestants
+	 */
+	CompetitionDijkstra(String filename, int sA, int sB, int sC) {
+		this.filename = filename;
+		this.sA = sA;
+		this.sB = sB;
+		this.sC = sC;
+		this.initArrayAndSlowest();
+	}
 
-    /**
-    * @return int: minimum minutes that will pass before the three contestants can meet
-     */
-    public int timeRequiredforCompetition(){
+	// initialise the array and get slowest person
+	private void initArrayAndSlowest() {
+		double[][] tmpRoads = null;
+		try {
+			BufferedReader bReader = new BufferedReader(new FileReader(filename));
+			numOfIntersections = Integer.parseInt(bReader.readLine());
+			numOfStreets = Integer.parseInt(bReader.readLine());
 
-        //TO DO
-        return -1;
-    }
+			tmpRoads = new double[numOfStreets][];
+			// read from file and write to array
+			String line;
+			int i = 0;
+			while ((line = bReader.readLine()) != null) {
+				String[] lSplit = line.split(" ");
+				double[] lVals = { Double.parseDouble(lSplit[0]), Double.parseDouble(lSplit[1]),
+						Double.parseDouble(lSplit[2]) };
+				tmpRoads[i++] = lVals;
+			}
+			bReader.close();
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+		}
+		
+		roadConnections = new double[numOfIntersections][];
+		for(int i = 0; i < numOfIntersections; i++) {
+			int numOfAdjStreets = 0;
+			for(int j = 0; j < numOfStreets; j++) {
+				if(tmpRoads[j][0] == i)
+					numOfAdjStreets++;
+			}
+			
+		}
 
+		if (sA < sB && sA < sC)
+			slowest = sA;
+		else if (sB < sA && sB < sC)
+			slowest = sB;
+		else
+			slowest = sC;
+	}
+	
+	
+
+	/**
+	 * @return int: minimum minutes that will pass before the three contestants can
+	 *         meet
+	 */
+	public int timeRequiredforCompetition() {
+		if ((sA > 100 && sA < 50) || (sB > 100 && sB < 50) || (sC > 100 && sC < 50))
+			return -1;
+
+		for (int i = 0; i < numOfIntersections; i++) {
+
+		}
+
+		return -1;
+	}
+	
+	
+	private class Graph{
+		double[][] streets;
+		int numOfIntersections, numOfStreets;
+		Intersection[] intersections;
+		Graph(double[][] streets, int numOfIntersections, int numOfStreets){
+			this.streets = streets; 
+			this.numOfIntersections = numOfIntersections;
+			this.numOfStreets = numOfStreets;
+			intersections = new Intersection[numOfIntersections];
+		}
+		
+		private class Intersection{
+			
+			Intersection(double[] connections) {
+				
+			}
+		}
+	}
+	
+	
 }
