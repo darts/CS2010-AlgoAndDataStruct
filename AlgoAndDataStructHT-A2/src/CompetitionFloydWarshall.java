@@ -21,8 +21,9 @@ public class CompetitionFloydWarshall {
 
 	public static void main(String[] args) {
 		CompetitionFloydWarshall comp = new CompetitionFloydWarshall("tinyEWD.txt", 50, 50, 50);
-		comp.timeRequiredforCompetition();
-		comp.printSolution();
+		int time = comp.timeRequiredforCompetition();
+		System.out.print(time);
+//		comp.printSolution();
 	}
 
 	/**
@@ -36,16 +37,18 @@ public class CompetitionFloydWarshall {
 
 	int numOfIntersections, numOfStreets;
 	double gridArr[][]; // road[from][to]
+	int slowest;
 
 	CompetitionFloydWarshall(String filename, int sA, int sB, int sC) {
 		this.filename = filename;
 		this.sA = sA;
 		this.sB = sB;
 		this.sC = sC;
-		this.readFromFile();
+		this.initArrayAndSlowest();
 	}
 
-	private void readFromFile() {
+	// initialise the array and get slowest person
+	private void initArrayAndSlowest() {
 		try {
 			BufferedReader bReader = new BufferedReader(new FileReader(filename));
 			numOfIntersections = Integer.parseInt(bReader.readLine());
@@ -67,6 +70,13 @@ public class CompetitionFloydWarshall {
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
+
+		if (sA < sB && sA < sC)
+			slowest = sA;
+		else if (sB < sA && sB < sC)
+			slowest = sB;
+		else
+			slowest = sC;
 	}
 
 	/**
@@ -84,9 +94,18 @@ public class CompetitionFloydWarshall {
 					if (gridArr[i][k] + gridArr[k][j] < gridArr[i][j])
 						gridArr[i][j] = gridArr[i][k] + gridArr[k][j];
 
-		
-		// TO DO
-		return -1;
+		double max = getMax();
+		max *= 1000; // convert to meters
+		return (int) Math.ceil(max/slowest);
+	}
+
+	//gets the largest num in the array
+	private double getMax() {
+		double max = -1;
+		for (int i = 0; i < numOfIntersections; i++)
+			for (int j = 0; j < numOfIntersections; j++)
+				max = (gridArr[i][j] > max) ? gridArr[i][j] : max;
+		return max;
 	}
 
 	void printSolution() {
