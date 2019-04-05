@@ -31,6 +31,7 @@ public class CompetitionFloydWarshall {
 	int numOfIntersections, numOfStreets;
 	double gridArr[][]; // road[from][to]
 	int slowest;
+	boolean fileInvalid = false;
 
 	CompetitionFloydWarshall(String filename, int sA, int sB, int sC) {
 		this.filename = filename;
@@ -46,22 +47,25 @@ public class CompetitionFloydWarshall {
 			BufferedReader bReader = new BufferedReader(new FileReader(filename));
 			numOfIntersections = Integer.parseInt(bReader.readLine());
 			numOfStreets = Integer.parseInt(bReader.readLine());
+			if (numOfIntersections == 0 || numOfStreets == 0)
+				fileInvalid = true;
+			else {
+				gridArr = new double[numOfIntersections][numOfIntersections]; // create array
+				// init array values to infinite except for a
+				for (int i = 0; i < numOfIntersections; i++)
+					for (int j = 0; j < numOfIntersections; j++)
+						gridArr[i][j] = INFINITY;
 
-			gridArr = new double[numOfIntersections][numOfIntersections]; // create array
-			// init array values to infinite except for a
-			for (int i = 0; i < numOfIntersections; i++)
-				for (int j = 0; j < numOfIntersections; j++)
-					gridArr[i][j] = INFINITY;
-
-			// read from file and write to array
-			String line;
-			while ((line = bReader.readLine()) != null) {
-				String[] lVals = line.split(" ");
-				gridArr[Integer.parseInt(lVals[0])][Integer.parseInt(lVals[1])] = Double.parseDouble(lVals[2]);
+				// read from file and write to array
+				String line;
+				while ((line = bReader.readLine()) != null) {
+					String[] lVals = line.split(" ");
+					gridArr[Integer.parseInt(lVals[0])][Integer.parseInt(lVals[1])] = Double.parseDouble(lVals[2]);
+				}
+				bReader.close();
 			}
-			bReader.close();
 		} catch (Exception e) {
-			e.printStackTrace(System.out);
+			fileInvalid = true;
 		}
 
 		if (sA < sB && sA < sC)
@@ -80,6 +84,9 @@ public class CompetitionFloydWarshall {
 		if ((sA > 100 && sA < 50) || (sB > 100 && sB < 50) || (sC > 100 && sC < 50))
 			return -1;
 
+		if (fileInvalid)
+			return -1;
+
 		// run Floyd Warshall
 		for (int k = 0; k < numOfIntersections; k++)
 			for (int i = 0; i < numOfIntersections; i++)
@@ -88,13 +95,13 @@ public class CompetitionFloydWarshall {
 						gridArr[i][j] = gridArr[i][k] + gridArr[k][j];
 
 		double max = getMax();
-		if(max == INFINITY)
+		if (max == INFINITY)
 			return -1;
 		max *= 1000; // convert to meters
-		return (int) Math.ceil(max/slowest);
+		return (int) Math.ceil(max / slowest);
 	}
 
-	//gets the largest num in the array
+	// gets the largest num in the array
 	private double getMax() {
 		double max = -1;
 		for (int i = 0; i < numOfIntersections; i++)

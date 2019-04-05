@@ -19,8 +19,7 @@ import java.io.FileReader;
  */
 
 public class CompetitionDijkstra {
-	
-	
+
 	private static final double INFINITY = Integer.MAX_VALUE / 3;
 
 	String filename;
@@ -29,6 +28,7 @@ public class CompetitionDijkstra {
 	int numOfIntersections, numOfStreets;
 	int slowest;
 	double[][] gridArr;
+	boolean fileInvalid = false;
 
 	/**
 	 * @param filename: A filename containing the details of the city road network
@@ -48,22 +48,25 @@ public class CompetitionDijkstra {
 			BufferedReader bReader = new BufferedReader(new FileReader(filename));
 			numOfIntersections = Integer.parseInt(bReader.readLine());
 			numOfStreets = Integer.parseInt(bReader.readLine());
+			if (numOfIntersections == 0 || numOfStreets == 0)
+				fileInvalid = true;
+			else {
+				gridArr = new double[numOfIntersections][numOfIntersections]; // create array
+				// init array values to infinite except for a
+				for (int i = 0; i < numOfIntersections; i++)
+					for (int j = 0; j < numOfIntersections; j++)
+						gridArr[i][j] = INFINITY;
 
-			gridArr = new double[numOfIntersections][numOfIntersections]; // create array
-			// init array values to infinite except for a
-			for (int i = 0; i < numOfIntersections; i++)
-				for (int j = 0; j < numOfIntersections; j++)
-					gridArr[i][j] = INFINITY;
-
-			// read from file and write to array
-			String line;
-			while ((line = bReader.readLine()) != null) {
-				String[] lVals = line.split(" ");
-				gridArr[Integer.parseInt(lVals[0])][Integer.parseInt(lVals[1])] = Double.parseDouble(lVals[2]);
+				// read from file and write to array
+				String line;
+				while ((line = bReader.readLine()) != null) {
+					String[] lVals = line.split(" ");
+					gridArr[Integer.parseInt(lVals[0])][Integer.parseInt(lVals[1])] = Double.parseDouble(lVals[2]);
+				}
+				bReader.close();
 			}
-			bReader.close();
 		} catch (Exception e) {
-			e.printStackTrace(System.out);
+			fileInvalid = true;
 		}
 
 		if (sA < sB && sA < sC)
@@ -80,6 +83,9 @@ public class CompetitionDijkstra {
 	 */
 	public int timeRequiredforCompetition() {
 		if ((sA > 100 && sA < 50) || (sB > 100 && sB < 50) || (sC > 100 && sC < 50))
+			return -1;
+
+		if (fileInvalid)
 			return -1;
 		double longestShortest = 0;
 		for (int i = 0; i < numOfIntersections; i++) {
@@ -98,7 +104,8 @@ public class CompetitionDijkstra {
 			do {
 				int currentLowestAddr = getLowestAddr(dist, permanent);
 				for (int j = 0; j < numOfIntersections; j++) {
-					if ((gridArr[currentLowestAddr][j] + dist[currentLowestAddr]) < dist[j] && !permanent[j] && gridArr[currentLowestAddr][j] != 0) {
+					if ((gridArr[currentLowestAddr][j] + dist[currentLowestAddr]) < dist[j] && !permanent[j]
+							&& gridArr[currentLowestAddr][j] != 0) {
 						dist[j] = (gridArr[currentLowestAddr][j] + dist[currentLowestAddr]);
 						numActive++;
 						reached[j] = true;
@@ -108,12 +115,12 @@ public class CompetitionDijkstra {
 				numActive--;
 			} while (numActive > 0);
 			double tmpLS = getHighestValue(dist);
-			if(tmpLS == INFINITY)
+			if (tmpLS == INFINITY)
 				return -1;
 			longestShortest = (tmpLS > longestShortest) ? tmpLS : longestShortest;
 		}
 		longestShortest *= 1000; // convert to meters
-		return (int) Math.ceil(longestShortest/slowest);
+		return (int) Math.ceil(longestShortest / slowest);
 
 	}
 
@@ -123,7 +130,7 @@ public class CompetitionDijkstra {
 			lowest = ((arr[i] < arr[lowest] && !perm[i]) || perm[lowest]) ? i : lowest;
 		return lowest;
 	}
-	
+
 	private double getHighestValue(double[] arr) {
 		double highest = 0;
 		for (int i = 0; i < arr.length; i++)
