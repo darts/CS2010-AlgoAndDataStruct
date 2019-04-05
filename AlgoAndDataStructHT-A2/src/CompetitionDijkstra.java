@@ -26,7 +26,7 @@ public class CompetitionDijkstra {
 
 	int numOfIntersections, numOfStreets;
 	int slowest;
-	double[][] roadConnections;
+	double[][] gridArr;
 
 	/**
 	 * @param filename: A filename containing the details of the city road network
@@ -42,35 +42,26 @@ public class CompetitionDijkstra {
 
 	// initialise the array and get slowest person
 	private void initArrayAndSlowest() {
-		double[][] tmpRoads = null;
 		try {
 			BufferedReader bReader = new BufferedReader(new FileReader(filename));
 			numOfIntersections = Integer.parseInt(bReader.readLine());
 			numOfStreets = Integer.parseInt(bReader.readLine());
 
-			tmpRoads = new double[numOfStreets][];
+			gridArr = new double[numOfIntersections][numOfIntersections]; // create array
+			// init array values to infinite except for a
+			for (int i = 0; i < numOfIntersections; i++)
+				for (int j = 0; j < numOfIntersections; j++)
+					gridArr[i][j] = INFINITY;
+
 			// read from file and write to array
 			String line;
-			int i = 0;
 			while ((line = bReader.readLine()) != null) {
-				String[] lSplit = line.split(" ");
-				double[] lVals = { Double.parseDouble(lSplit[0]), Double.parseDouble(lSplit[1]),
-						Double.parseDouble(lSplit[2]) };
-				tmpRoads[i++] = lVals;
+				String[] lVals = line.split(" ");
+				gridArr[Integer.parseInt(lVals[0])][Integer.parseInt(lVals[1])] = Double.parseDouble(lVals[2]);
 			}
 			bReader.close();
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
-		}
-		
-		roadConnections = new double[numOfIntersections][];
-		for(int i = 0; i < numOfIntersections; i++) {
-			int numOfAdjStreets = 0;
-			for(int j = 0; j < numOfStreets; j++) {
-				if(tmpRoads[j][0] == i)
-					numOfAdjStreets++;
-			}
-			
 		}
 
 		if (sA < sB && sA < sC)
@@ -99,24 +90,7 @@ public class CompetitionDijkstra {
 	}
 	
 	
-	private class Graph{
-		double[][] streets;
-		int numOfIntersections, numOfStreets;
-		Intersection[] intersections;
-		Graph(double[][] streets, int numOfIntersections, int numOfStreets){
-			this.streets = streets; 
-			this.numOfIntersections = numOfIntersections;
-			this.numOfStreets = numOfStreets;
-			intersections = new Intersection[numOfIntersections];
-		}
-		
-		private class Intersection{
-			
-			Intersection(double[] connections) {
-				
-			}
-		}
-	}
+	
 	
 	
 }
