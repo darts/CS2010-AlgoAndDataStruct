@@ -81,7 +81,7 @@ public class CompetitionFloydWarshall {
 	 *         meet
 	 */
 	public int timeRequiredforCompetition() {
-		if ((sA > 100 && sA < 50) || (sB > 100 && sB < 50) || (sC > 100 && sC < 50))
+		if ((sA > 100 || sA < 50) || (sB > 100 || sB < 50) || (sC > 100 || sC < 50))
 			return -1;
 
 		if (fileInvalid)
