@@ -19,13 +19,6 @@ import java.io.FileReader;
 
 public class CompetitionFloydWarshall {
 
-	public static void main(String[] args) {
-		CompetitionFloydWarshall comp = new CompetitionFloydWarshall("tinyEWD.txt", 50, 50, 50);
-		int time = comp.timeRequiredforCompetition();
-		System.out.print(time);
-//		comp.printSolution();
-	}
-
 	/**
 	 * @param filename: A filename containing the details of the city road network
 	 * @param sA,       sB, sC: speeds for 3 contestants
@@ -109,17 +102,4 @@ public class CompetitionFloydWarshall {
 				max = (gridArr[i][j] > max && i != j) ? gridArr[i][j] : max;
 		return max;
 	}
-
-	void printSolution() {
-		for (int i = 0; i < numOfIntersections; ++i) {
-			for (int j = 0; j < numOfIntersections; ++j) {
-				if (gridArr[i][j] == INFINITY)
-					System.out.print("INF ");
-				else
-					System.out.print(gridArr[i][j] + "   ");
-			}
-			System.out.println();
-		}
-	}
-
 }

@@ -19,11 +19,6 @@ import java.io.FileReader;
  */
 
 public class CompetitionDijkstra {
-	public static void main(String[] args) {
-		CompetitionDijkstra comp = new CompetitionDijkstra("tinyEWD.txt", 50, 50, 50);
-		int time = comp.timeRequiredforCompetition();
-		System.out.print(time);
-	}
 	
 	
 	private static final double INFINITY = Integer.MAX_VALUE / 3;
@@ -117,7 +112,6 @@ public class CompetitionDijkstra {
 				return -1;
 			longestShortest = (tmpLS > longestShortest) ? tmpLS : longestShortest;
 		}
-		System.out.println(longestShortest);
 		longestShortest *= 1000; // convert to meters
 		return (int) Math.ceil(longestShortest/slowest);
 
