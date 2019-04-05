@@ -19,6 +19,13 @@ import java.io.FileReader;
  */
 
 public class CompetitionDijkstra {
+	public static void main(String[] args) {
+		CompetitionDijkstra comp = new CompetitionDijkstra("tinyEWD.txt", 50, 50, 50);
+		int time = comp.timeRequiredforCompetition();
+		System.out.print(time);
+	}
+	
+	
 	private static final double INFINITY = Integer.MAX_VALUE / 3;
 
 	String filename;
@@ -71,8 +78,6 @@ public class CompetitionDijkstra {
 		else
 			slowest = sC;
 	}
-	
-	
 
 	/**
 	 * @return int: minimum minutes that will pass before the three contestants can
@@ -81,16 +86,55 @@ public class CompetitionDijkstra {
 	public int timeRequiredforCompetition() {
 		if ((sA > 100 && sA < 50) || (sB > 100 && sB < 50) || (sC > 100 && sC < 50))
 			return -1;
-
+		double longestShortest = 0;
 		for (int i = 0; i < numOfIntersections; i++) {
+			double[] dist = new double[numOfIntersections];
+			boolean[] permanent = new boolean[numOfIntersections];
+			boolean[] reached = new boolean[numOfIntersections];
+			int numActive = 1;
+			for (int m = 0; m < numOfIntersections; m++) {
+				dist[m] = INFINITY;
+				permanent[m] = false;
+				reached[m] = false;
+			}
+			dist[i] = 0;
+			reached[i] = true;
 
+			do {
+				int currentLowestAddr = getLowestAddr(dist, permanent);
+				for (int j = 0; j < numOfIntersections; j++) {
+					if ((gridArr[currentLowestAddr][j] + dist[currentLowestAddr]) < dist[j] && !permanent[j] && gridArr[currentLowestAddr][j] != 0) {
+						dist[j] = (gridArr[currentLowestAddr][j] + dist[currentLowestAddr]);
+						numActive++;
+						reached[j] = true;
+					}
+				}
+				permanent[currentLowestAddr] = true;
+				numActive--;
+			} while (numActive > 0);
+			double tmpLS = getHighestValue(dist);
+			if(tmpLS == INFINITY)
+				return -1;
+			longestShortest = (tmpLS > longestShortest) ? tmpLS : longestShortest;
 		}
+		System.out.println(longestShortest);
+		longestShortest *= 1000; // convert to meters
+		return (int) Math.ceil(longestShortest/slowest);
 
-		return -1;
+	}
+
+	private int getLowestAddr(double[] arr, boolean[] perm) {
+		int lowest = 0;
+		for (int i = 1; i < arr.length; i++)
+			lowest = ((arr[i] < arr[lowest] && !perm[i]) || perm[lowest]) ? i : lowest;
+		return lowest;
 	}
 	
-	
-	
-	
-	
+	private double getHighestValue(double[] arr) {
+		double highest = 0;
+		for (int i = 0; i < arr.length; i++)
+			highest = (arr[i] > highest) ? arr[i] : highest;
+		return highest;
+	}
+
 }

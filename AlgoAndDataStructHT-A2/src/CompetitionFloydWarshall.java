@@ -95,6 +95,8 @@ public class CompetitionFloydWarshall {
 						gridArr[i][j] = gridArr[i][k] + gridArr[k][j];
 
 		double max = getMax();
+		if(max == INFINITY)
+			return -1;
 		max *= 1000; // convert to meters
 		return (int) Math.ceil(max/slowest);
 	}
@@ -104,7 +106,7 @@ public class CompetitionFloydWarshall {
 		double max = -1;
 		for (int i = 0; i < numOfIntersections; i++)
 			for (int j = 0; j < numOfIntersections; j++)
-				max = (gridArr[i][j] > max && gridArr[i][j] != INFINITY) ? gridArr[i][j] : max;
+				max = (gridArr[i][j] > max && i != j) ? gridArr[i][j] : max;
 		return max;
 	}
 
