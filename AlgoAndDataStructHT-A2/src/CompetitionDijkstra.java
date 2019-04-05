@@ -104,8 +104,7 @@ public class CompetitionDijkstra {
 			do {
 				int currentLowestAddr = getLowestAddr(dist, permanent);
 				for (int j = 0; j < numOfIntersections; j++) {
-					if ((gridArr[currentLowestAddr][j] + dist[currentLowestAddr]) < dist[j] && !permanent[j]
-							&& gridArr[currentLowestAddr][j] != 0) {
+					if ((gridArr[currentLowestAddr][j] + dist[currentLowestAddr]) < dist[j] && !permanent[j]) {
 						dist[j] = (gridArr[currentLowestAddr][j] + dist[currentLowestAddr]);
 						numActive++;
 						reached[j] = true;
