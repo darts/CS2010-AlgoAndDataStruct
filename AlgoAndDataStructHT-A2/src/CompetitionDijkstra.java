@@ -78,11 +78,47 @@ public class CompetitionDijkstra {
 			slowest = sC;
 	}
 
+	
+	public int timeRequiredforCompetition() {
+		if ((sA > 100 || sA < 50) || (sB > 100 || sB < 50) || (sC > 100 || sC < 50))
+			return -1;
+		
+		if (fileInvalid)
+			return -1;
+		double longestShortest = 0;
+		for (int i = 0; i < numOfIntersections; i++) {
+			minHeap dist = new minHeap(numOfIntersections);
+			boolean[] permanent = new boolean[numOfIntersections];
+			
+			dist.insert(i, 0);
+
+			do {
+				minHeap.storeSet lowest = dist.delMin();
+				int currentLowestAddr = lowest.node;
+				for (int j = 0; j < numOfIntersections; j++) {
+					if ((gridArr[currentLowestAddr][j] + lowest.cost) < dist.costTo(j) && !permanent[j]) {
+						dist.setCostTo(j, (gridArr[currentLowestAddr][j] + lowest.cost));
+					}
+				}
+				
+			} while (!dist.isEmpty());
+			double tmpLS = dist.getLargest();
+			if (tmpLS == INFINITY)
+				return -1;
+			longestShortest = (tmpLS > longestShortest) ? tmpLS : longestShortest;
+		}
+		longestShortest *= 1000; // convert to meters
+		return (int) Math.ceil(longestShortest / slowest);
+
+	}
+	
+	
+	
 	/**
 	 * @return int: minimum minutes that will pass before the three contestants can
 	 *         meet
 	 */
-	public int timeRequiredforCompetition() {
+	public int timeRequiredforCompetitionArray() {
 		if ((sA > 100 || sA < 50) || (sB > 100 || sB < 50) || (sC > 100 || sC < 50))
 			return -1;
 		
@@ -139,43 +175,83 @@ public class CompetitionDijkstra {
 	}
 	
 	class minHeap {
-		double[] arr;
+		class storeSet{
+			int node;
+			double cost;
+			storeSet(int node, double cost){
+				this.node = node;
+				this.cost = cost;
+			}
+		}
+		
+		int[] nodeLocArr;
+		int numNotReached;
+		storeSet[] arr;
 		int activeItems;
 		int size;
 		
 		minHeap(int size){
 			this.size = size;
-			arr = new double[size]; //reduce array size to preserve memory
+			arr = new storeSet[size+1];
+			nodeLocArr = new int[size];
+			for(int i = 0; i < size; i++) {
+				nodeLocArr[i] = i+1;
+				arr[i+1] = new storeSet(i, INFINITY);
+			}
 			activeItems = 0;
+			numNotReached = size;
 		}
 		
+		//find out if queue is empty
 		boolean isEmpty() {
 			return activeItems == 0;
 		}
 		
+		//get the smallest item but do not remove from array
 		double getMin() {
-			return (activeItems > 0) ? arr[1] : -1;
+			return (activeItems > 0) ? arr[1].cost : -1;
 		}
+		
+		double costTo(int node) {
+			return arr[nodeLocArr[node]].cost;
+		}
+		
+		void setCostTo(int node, double cost) {
+			if(costTo(node) == INFINITY) {
+				activeItems++;
+				numNotReached--;
+			}
+			arr[nodeLocArr[node]].cost = cost;
+			swim(nodeLocArr[node]);
+		}
+		
 		
 		//the array is kept smaller by default in order to preserve memory
 		//this function changes the size of the array
+		@SuppressWarnings("unused")
 		private void changeSize(int newSize) {
-			double[] tmp = new double[newSize];
+			storeSet[] tmp = new storeSet[newSize];
 			for(int i = 0; i < activeItems; i++) 
 				tmp[i] = arr[i];
 			arr = tmp;
 		}
 		
+		//swap two elements
 		void swap(int a, int b) {
-			double tmp = arr[a];
+			storeSet tmp = arr[a];
 			arr[a] = arr[b];
 			arr[b] = tmp;
+			int tmpAddr = nodeLocArr[arr[a].node];
+			nodeLocArr[arr[a].node] = nodeLocArr[arr[b].node];
+			nodeLocArr[arr[b].node] = tmpAddr;
 		}
 		
+		//is one item greater that the other
 		private boolean greater(int i, int j) {
-	        return arr[i] > arr[j];
+	        return arr[i].cost > arr[j].cost;
 	    }
 		
+		//swim up in tree
 		private void swim(int k) {
 	        while (k > 1 && greater(k/2, k)) {
 	            swap(k, k/2);
@@ -183,6 +259,7 @@ public class CompetitionDijkstra {
 	        }
 	    }
 
+		//sink down in tree
 	    private void sink(int k) {
 	        while (2*k <= activeItems) {
 	            int j = 2*k;
@@ -193,18 +270,29 @@ public class CompetitionDijkstra {
 	        }
 	    }
 		
-		void insert(double item) {
-			if(activeItems == arr.length - 1) changeSize(activeItems*2);
-			arr[++activeItems] = item;
+	    //add an item to the tree and swim to correct location
+		void insert(int node, double cost) {
+//			if(activeItems == arr.length - 1) changeSize(activeItems*2);
+			arr[++activeItems] = new storeSet(node, cost);
+			nodeLocArr[node] = activeItems;
 			swim(activeItems);	
+			numNotReached--;
 		}
 		
-		double delMin() {
-	        double min = arr[1];
+		double getLargest() {
+			double largest = 0;
+			for(int i = 0; i < arr.length; i++) 
+				largest = (arr[i].cost > largest) ? arr[i].cost : largest;
+			return largest;
+		}
+		
+		//return the lowest value and remove from tree
+		storeSet delMin() {
+	        storeSet min = arr[1];
 	        swap(1, activeItems--);
 	        sink(1);
 
-	        if ((activeItems > 0) && (activeItems == (arr.length - 1) / 4)) changeSize(arr.length / 2);
+//	        if ((activeItems > 0) && (activeItems == (arr.length - 1) / 4)) changeSize(arr.length / 2);
 	        return min;
 	    }
 		
