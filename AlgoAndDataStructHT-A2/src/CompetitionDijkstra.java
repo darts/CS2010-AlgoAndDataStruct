@@ -83,7 +83,7 @@ public class CompetitionDijkstra {
 	 * @return int: minimum minutes that will pass before the three contestants can
 	 *         meet
 	 */
-	public int timeRequiredforCompetitionArray() {
+	public int timeRequiredforCompetition() {
 		if ((sA > 100 || sA < 50) || (sB > 100 || sB < 50) || (sC > 100 || sC < 50))
 			return -1;
 		
