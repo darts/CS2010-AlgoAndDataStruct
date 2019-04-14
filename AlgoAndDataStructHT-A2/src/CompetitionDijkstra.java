@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Arrays;
 
 /*
  * A Contest to Meet (ACM) is a reality TV contest that sets three contestants at three random
@@ -136,5 +137,78 @@ public class CompetitionDijkstra {
 			highest = (arr[i] > highest) ? arr[i] : highest;
 		return highest;
 	}
+	
+	class minHeap {
+		double[] arr;
+		int activeItems;
+		int size;
+		
+		minHeap(int size){
+			this.size = size;
+			arr = new double[size]; //reduce array size to preserve memory
+			activeItems = 0;
+		}
+		
+		boolean isEmpty() {
+			return activeItems == 0;
+		}
+		
+		double getMin() {
+			return (activeItems > 0) ? arr[1] : -1;
+		}
+		
+		//the array is kept smaller by default in order to preserve memory
+		//this function changes the size of the array
+		private void changeSize(int newSize) {
+			double[] tmp = new double[newSize];
+			for(int i = 0; i < activeItems; i++) 
+				tmp[i] = arr[i];
+			arr = tmp;
+		}
+		
+		void swap(int a, int b) {
+			double tmp = arr[a];
+			arr[a] = arr[b];
+			arr[b] = tmp;
+		}
+		
+		private boolean greater(int i, int j) {
+	        return arr[i] > arr[j];
+	    }
+		
+		private void swim(int k) {
+	        while (k > 1 && greater(k/2, k)) {
+	            swap(k, k/2);
+	            k = k/2;
+	        }
+	    }
+
+	    private void sink(int k) {
+	        while (2*k <= activeItems) {
+	            int j = 2*k;
+	            if (j < activeItems && greater(j, j+1)) j++;
+	            if (!greater(k, j)) break;
+	            swap(k, j);
+	            k = j;
+	        }
+	    }
+		
+		void insert(double item) {
+			if(activeItems == arr.length - 1) changeSize(activeItems*2);
+			arr[++activeItems] = item;
+			swim(activeItems);	
+		}
+		
+		double delMin() {
+	        double min = arr[1];
+	        swap(1, activeItems--);
+	        sink(1);
+
+	        if ((activeItems > 0) && (activeItems == (arr.length - 1) / 4)) changeSize(arr.length / 2);
+	        return min;
+	    }
+		
+	}
+	
 
 }
